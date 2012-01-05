@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreService", "CoreService\CoreService.csproj", "{C0182CCC-9F15-4DEC-B62C-F5303C1C8780}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSSMS_Site", "RSSMS_Site\RSSMS_Site.csproj", "{EA2F5A40-62A8-4F92-8C25-F1B84363F4EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C0182CCC-9F15-4DEC-B62C-F5303C1C8780} = {C0182CCC-9F15-4DEC-B62C-F5303C1C8780}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0182CCC-9F15-4DEC-B62C-F5303C1C8780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0182CCC-9F15-4DEC-B62C-F5303C1C8780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0182CCC-9F15-4DEC-B62C-F5303C1C8780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0182CCC-9F15-4DEC-B62C-F5303C1C8780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA2F5A40-62A8-4F92-8C25-F1B84363F4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA2F5A40-62A8-4F92-8C25-F1B84363F4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA2F5A40-62A8-4F92-8C25-F1B84363F4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA2F5A40-62A8-4F92-8C25-F1B84363F4EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
