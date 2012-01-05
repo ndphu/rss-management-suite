@@ -1,0 +1,5 @@
+c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\RSSMS_Site\bin\RSSMS_Site.dll
+c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\RSSMS_Site\bin\RSSMS_Site.pdb
+c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\RSSMS_Site\obj\Debug\RSSMS_Site.csprojResolveAssemblyReference.cache
+c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\RSSMS_Site\obj\Debug\RSSMS_Site.dll
+c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\RSSMS_Site\obj\Debug\RSSMS_Site.pdb
