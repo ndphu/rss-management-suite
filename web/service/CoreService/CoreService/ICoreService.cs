@@ -16,25 +16,25 @@ namespace CoreService
 
         bool Logout();
 
-        bool AddTab(Tab tab);
+        bool AddTab(string tabName);
 
-        bool RemoveTab(Tab tab);
+        bool RemoveTab(int tabID);
 
-        bool ShareTab(Tab tab, string userName);
+        bool ShareTab(int tabID, string userName);
 
-        bool RenameTab(Tab tab, string newName);
+        bool RenameTab(int tabID, string newName);
 
         Tab[] GetAllTabs();
         #endregion Phu
 
         #region Deo
-        bool AddRSSItem(Tab tab, RSSItem rssItem);
+        bool AddRSSItem(int tabID, string name, string description, string rsslink);
 
-        bool RemoveRSSItem(Tab tab, RSSItem rssItem);
+        bool RemoveRSSItem(int rssid);
 
-        RSSItem[] GetAllRSSItems(Tab tab);
+        RSSItem[] GetAllRSSItems(int tabID);
 
-        string GetRSSResult(RSSItem rssItem, int count);
+        string GetRSSResult(int rssid, int count);
         #endregion Deo
 
         string GetRSSResultHTML(RSSItem rssItem, int count);
