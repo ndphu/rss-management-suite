@@ -109,7 +109,7 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool AddTab(Tab tab)
+        public bool AddTab(string tabName)
         {
             bool result = false;
             try
@@ -119,7 +119,7 @@ namespace CoreService
 
                 Tab newTab = new Tab()
                 {
-                    Name = tab.Name,
+                    Name = tabName,
                     UserID = UserID,
                 };
 
@@ -141,7 +141,7 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool RemoveTab(Tab tab)
+        public bool RemoveTab(int tabid)
         {
             bool result = false;
 
@@ -149,7 +149,7 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabToDelete = dt.Tabs.Single(_tab => _tab.ID == tab.ID);
+                var tabToDelete = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
 
                 dt.Tabs.DeleteOnSubmit(tabToDelete);
                 dt.SubmitChanges();
@@ -169,7 +169,7 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool ShareTab(Tab tab, string userName)
+        public bool ShareTab(int tabid, string userName)
         {
             bool result = false;
 
@@ -177,8 +177,10 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
+                var tabToShare = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+
                 Share share = new Share();
-                share.TabID = tab.ID;
+                share.TabID = tabToShare.ID;
 
                 var IDUserToShare = dt.Accounts.Single(account => account.Username.CompareTo(userName) == 0).ID;
 
@@ -202,7 +204,7 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool RenameTab(Tab tab, string newName)
+        public bool RenameTab(int tabid, string newName)
         {
             bool result = false;
 
@@ -210,7 +212,7 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabToRename = dt.Tabs.Single(_tab => _tab.ID == tab.ID);
+                var tabToRename = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
                 tabToRename.Name = newName;
 
                 dt.SubmitChanges();
@@ -258,22 +260,22 @@ namespace CoreService
 
         #region Deo
         [WebMethod]
-        public bool AddRSSItem(Tab tab, RSSItem rssItem)
+        public bool AddRSSItem(int tabid, string name, string description, string rsslink)
         {
             throw new NotImplementedException();
         }
         [WebMethod]
-        public bool RemoveRSSItem(Tab tab, RSSItem rssItem)
+        public bool RemoveRSSItem(int rssid)
         {
             throw new NotImplementedException();
         }
         [WebMethod]
-        public RSSItem[] GetAllRSSItems(Tab tab)
+        public RSSItem[] GetAllRSSItems(int tabid)
         {
             throw new NotImplementedException();
         }
         [WebMethod]
-        public string GetRSSResult(RSSItem rssItem, int count)
+        public string GetRSSResult(int rssid, int count)
         {
             throw new NotImplementedException();
         }
