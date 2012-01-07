@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="RSSDB">
+  <DataContextMoniker Name="/RSSDBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="60d4a4ad-c005-4be1-8c75-a4006fd9d4a2" absoluteBounds="0.75, 2.125, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/RSSDBDataContext/Account" />
+      <nestedChildShapes>
+        <elementListCompartment Id="07612b13-f6b3-44e1-a030-d9e2ac3ea113" absoluteBounds="0.765, 2.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="0d938bea-947c-41b1-8501-9b5a6f2e61f4" absoluteBounds="3.5, 2.25, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/RSSDBDataContext/Tab" />
+      <nestedChildShapes>
+        <elementListCompartment Id="f8b3bc36-99c7-421f-b2a8-bdf9a41ae048" absoluteBounds="3.515, 2.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3bf0dec1-b40f-41cb-b9f3-379fdf191852" absoluteBounds="6.25, 4.25, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/RSSDBDataContext/RSSItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="b9eef18b-0f0a-49ff-83f2-0f6490c2bef5" absoluteBounds="6.265, 4.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ea0c9125-518d-4957-9583-01932336e9ec" absoluteBounds="6.25, 1.25, 2, 1.3862939453124998">
+      <DataClassMoniker Name="/RSSDBDataContext/Share" />
+      <nestedChildShapes>
+        <elementListCompartment Id="82aa82d4-f56c-439c-9bb0-972d2e10f834" absoluteBounds="6.265, 1.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 2.94314697265625); (3.5 : 2.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/RSSDBDataContext/Account/Account_Tab" />
+      <nodes>
+        <classShapeMoniker Id="60d4a4ad-c005-4be1-8c75-a4006fd9d4a2" />
+        <classShapeMoniker Id="0d938bea-947c-41b1-8501-9b5a6f2e61f4" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(4.5 : 3.6362939453125); (4.5 : 5.13544840494792); (6.25 : 5.13544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/RSSDBDataContext/Tab/Tab_RSSItem" />
+      <nodes>
+        <classShapeMoniker Id="0d938bea-947c-41b1-8501-9b5a6f2e61f4" />
+        <classShapeMoniker Id="3bf0dec1-b40f-41cb-b9f3-379fdf191852" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 2.15625); (6.25 : 2.15625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/RSSDBDataContext/Account/Account_Share" />
+      <nodes>
+        <classShapeMoniker Id="60d4a4ad-c005-4be1-8c75-a4006fd9d4a2" />
+        <classShapeMoniker Id="ea0c9125-518d-4957-9583-01932336e9ec" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 2.44314697265625); (6.25 : 2.44314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/RSSDBDataContext/Tab/Tab_Share" />
+      <nodes>
+        <classShapeMoniker Id="0d938bea-947c-41b1-8501-9b5a6f2e61f4" />
+        <classShapeMoniker Id="ea0c9125-518d-4957-9583-01932336e9ec" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
