@@ -61,6 +61,7 @@
       <DependentUpon>CoreServiceImpl.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CoreServiceMembershipProvider.cs" />
     <Compile Include="ICoreService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RSSDB.designer.cs">
