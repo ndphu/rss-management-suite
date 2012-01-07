@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">AndroidClient</string>
+	<string name="host_name">192.168.163.1</string>
+	<string name="host_port">7576</string>
+	<string name="service_name">CoreServiceImpl.asmx</string>
+</resources>
