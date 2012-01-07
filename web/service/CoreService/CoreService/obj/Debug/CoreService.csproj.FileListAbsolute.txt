@@ -1,5 +1,0 @@
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\CoreService\bin\CoreService.dll
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\CoreService\bin\CoreService.pdb
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\CoreService\obj\Debug\CoreService.csprojResolveAssemblyReference.cache
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\CoreService\obj\Debug\CoreService.dll
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\CoreService\obj\Debug\CoreService.pdb
