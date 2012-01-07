@@ -1,5 +1,0 @@
-c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\CoreService\obj\Debug\CoreService.csprojResolveAssemblyReference.cache
-c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\CoreService\bin\CoreService.dll
-c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\CoreService\bin\CoreService.pdb
-c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\CoreService\obj\Debug\CoreService.dll
-c:\users\ndphu\documents\visual studio 2010\Projects\CoreService\CoreService\obj\Debug\CoreService.pdb
