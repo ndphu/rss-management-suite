@@ -204,7 +204,9 @@ namespace CoreService
         // 0 - success
         // 1 - different owner 
         // 2 - tab not exist
-        // 3 - exception
+        // 3 - username not exist
+        // 4 - can't share yourselt
+        // 5 - exception
         public int ShareTab(int tabid, string userName)
         {
             int result = -1;
@@ -227,14 +229,30 @@ namespace CoreService
                         Share share = new Share();
                         share.TabID = tabToShare.ID;
 
-                        var IDUserToShare = dt.Accounts.Single(account => account.Username.CompareTo(userName) == 0).ID;
+                        var UsersToShare = dt.Accounts.Where(account => account.Username.CompareTo(userName) == 0);
+                        if (UsersToShare.Count<Account>() == 0)
+                        {
+                            result = 3;
+                        }
+                        else
+                        {
+                            share.AccountID = UsersToShare.Single().ID;
+                            if (share.AccountID == GetCurrentUserID())
+                                result = 4;
+                            else
+                            {
+                                var shares = dt.Shares.Where(_share => _share.TabID == tabid && (_share.AccountID == GetCurrentUserID() || _share.AccountID == share.AccountID));
+                                if (shares.Count<Share>() == 0)
+                                {
+                                    dt.Shares.InsertOnSubmit(share);
+                                    dt.SubmitChanges();
+                                }
 
-                        share.AccountID = IDUserToShare;
+                                result = 0;
+                            }
+                        }
 
-                        dt.Shares.InsertOnSubmit(share);
-                        dt.SubmitChanges();
-
-                        result = 0;
+                       
                     }
                 }
                 
@@ -283,7 +301,6 @@ namespace CoreService
                         else
                         {
                             tabToRename.Name = newName;
-
                             dt.SubmitChanges();
 
                             result = 0;
