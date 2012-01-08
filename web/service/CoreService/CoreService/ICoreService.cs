@@ -18,13 +18,13 @@ namespace CoreService
 
         bool Logout();
 
-        bool AddTab(string tabName);
+        int AddTab(string tabName);
 
-        bool RemoveTab(int tabID);
+        int RemoveTab(int tabID);
 
-        bool ShareTab(int tabID, string userName);
+        int ShareTab(int tabID, string userName);
 
-        bool RenameTab(int tabID, string newName);
+        int RenameTab(int tabID, string newName);
 
         TabDTO[] GetAllTabs();
 

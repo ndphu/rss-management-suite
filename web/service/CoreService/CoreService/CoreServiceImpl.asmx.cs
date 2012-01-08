@@ -112,28 +112,39 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool AddTab(string tabName)
+        // 0 - success.
+        // 1 - name exist
+        // 2 - exception
+        public int AddTab(string tabName)
         {
-            bool result = false;
+            int result = -1;
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
-                int UserID = GetCurrentUserID();
-
-                Tab newTab = new Tab()
+                var tabs = dt.Tabs.Where(tab => tab.Name.CompareTo(tabName) == 0);
+                if (tabs.Count<Tab>() == 0)
                 {
-                    Name = tabName,
-                    UserID = UserID,
-                };
+                    int UserID = GetCurrentUserID();
 
-                dt.Tabs.InsertOnSubmit(newTab);
-                dt.SubmitChanges();
+                    Tab newTab = new Tab()
+                    {
+                        Name = tabName,
+                        UserID = UserID,
+                    };
 
-                result = true;
+                    dt.Tabs.InsertOnSubmit(newTab);
+                    dt.SubmitChanges();
+
+                    result = 0;
+                }
+                else
+                {
+                    result = 1;
+                }
             }
             catch
             {
-                result = false;
+                result = 2;
             }
             finally
             {
@@ -144,25 +155,42 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool RemoveTab(int tabid)
+        // 0 - success
+        // 1 - different owner 
+        // 2 - tab not exist
+        // 3 - exception
+        public int RemoveTab(int tabid)
         {
-            bool result = false;
+            int result = -1;
 
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
-
-                var tabToDelete = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
-                var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID);
-                dt.Shares.DeleteAllOnSubmit(shares);
-                dt.Tabs.DeleteOnSubmit(tabToDelete);
-                dt.SubmitChanges();
-
-                result = true;
+                
+                var tabsToDelete = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                if (tabsToDelete.Count<Tab>() == 0)
+                {
+                    result = 2;
+                }
+                else
+                {
+                    var tabToDelete = tabsToDelete.Single();
+                    if (tabToDelete.UserID != GetCurrentUserID())
+                        result = 1;
+                    else
+                    {
+                        var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID);
+                        dt.Shares.DeleteAllOnSubmit(shares);
+                        dt.Tabs.DeleteOnSubmit(tabToDelete);
+                        dt.SubmitChanges();
+                        result = 0;
+                    }
+                }
+                
             }
             catch
             {
-                result = false;
+                result = 3;
             }
             finally
             {
@@ -173,31 +201,47 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool ShareTab(int tabid, string userName)
+        // 0 - success
+        // 1 - different owner 
+        // 2 - tab not exist
+        // 3 - exception
+        public int ShareTab(int tabid, string userName)
         {
-            bool result = false;
+            int result = -1;
 
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabToShare = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                var tabsToShare = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
 
-                Share share = new Share();
-                share.TabID = tabToShare.ID;
+                if (tabsToShare.Count<Tab>() == 0)
+                    result = 2;
+                else
+                {
+                    var tabToShare = tabsToShare.Single();
+                    if (tabToShare.UserID != GetCurrentUserID())
+                        result = 1;
+                    else
+                    {
+                        Share share = new Share();
+                        share.TabID = tabToShare.ID;
 
-                var IDUserToShare = dt.Accounts.Single(account => account.Username.CompareTo(userName) == 0).ID;
+                        var IDUserToShare = dt.Accounts.Single(account => account.Username.CompareTo(userName) == 0).ID;
 
-                share.AccountID = IDUserToShare;
+                        share.AccountID = IDUserToShare;
 
-                dt.Shares.InsertOnSubmit(share);
-                dt.SubmitChanges();
+                        dt.Shares.InsertOnSubmit(share);
+                        dt.SubmitChanges();
 
-                result = true;
+                        result = 0;
+                    }
+                }
+                
             }
             catch
             {
-                result = false;
+                result = 3;
             }
             finally
             {
@@ -208,24 +252,49 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool RenameTab(int tabid, string newName)
+        // 0 - success
+        // 1 - different owner 
+        // 2 - tab not exist
+        // 3 - duplicate name
+        // 4 - exception
+        public int RenameTab(int tabid, string newName)
         {
-            bool result = false;
+            int result = -1;
 
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabToRename = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
-                tabToRename.Name = newName;
+                var tabsToRename = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                if (tabsToRename.Count<Tab>() == 0)
+                    result = 2;
+                else
+                {
+                    var tabToRename = tabsToRename.Single();
+                    if (tabToRename.UserID != GetCurrentUserID())
+                    {
+                        result = 1;
+                    }
+                    else
+                    {
+                        var sameName = dt.Tabs.Where(tab => tab.UserID == GetCurrentUserID() && tab.Name.CompareTo(newName) == 0);
+                        if (sameName.Count<Tab>() != 0)
+                            result = 3;
+                        else
+                        {
+                            tabToRename.Name = newName;
 
-                dt.SubmitChanges();
+                            dt.SubmitChanges();
 
-                result = true;
+                            result = 0;
+                        }
+                    }
+                }
+                
             }
             catch
             {
-                result = false;
+                result = 4;
             }
             finally
             {
