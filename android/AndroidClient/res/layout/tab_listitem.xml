@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:background="#ff555555">
+	<ImageView android:layout_width="64dp" android:layout_height="64dp"
+		android:src="@drawable/icon" android:scaleType="centerInside"
+		android:layout_alignParentLeft="true" android:id="@+id/tabIcon" />
+	<TextView style="@style/large_textview" android:text="TabName"
+		android:layout_alignParentTop="true" android:layout_toRightOf="@id/tabIcon"
+		android:id="@+id/tabName" />
+	<TextView style="@style/small_textview" android:text="TabOwner"
+		android:layout_below="@id/tabName" android:layout_toRightOf="@id/tabIcon"
+		android:id="@+id/tabOwner" />
+</RelativeLayout>

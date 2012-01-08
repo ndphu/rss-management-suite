@@ -1,8 +1,11 @@
 package com.rssms.client.io;
 
+import android.content.res.Resources;
+
 
 public class FileIO {
-	private static final String TAG = FileIO.class.getName();
 
-	
+	public static String getSoapEnvelop(Resources resource, int fileID){
+		return IOUtility.getStringFromStream(resource.openRawResource(fileID));
+	}
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:background="@drawable/background">
+	<TextView android:layout_marginTop="100dp" android:text="Server Address:"
+		style="@style/large_textview"></TextView>
+	<EditText android:layout_width="match_parent" android:id="@+id/host"
+		style="@style/large_edittext">
+		<requestFocus></requestFocus>
+	</EditText>
+	<TextView android:text="Server Port:" style="@style/large_textview"></TextView>
+	<EditText android:layout_width="match_parent" android:id="@+id/port"
+		style="@style/large_edittext" android:inputType="numberDecimal"></EditText>
+	<TextView android:text="Service Name:" style="@style/large_textview"></TextView>
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<EditText android:id="@+id/service" style="@style/large_edittext"
+			android:inputType="text" android:layout_width="225dp"
+			android:layout_marginRight="0dp"></EditText>
+		<TextView style="@style/large_textview" android:text=".asmx" />
+	</LinearLayout>
+	<Button android:id="@+id/btn_save" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="SAVE" android:layout_height="50dp"
+		android:onClick="onSaveClick"></Button>
+	<Button android:id="@+id/btn_back" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="BACK" android:layout_height="50dp"
+		android:onClick="onBackClick"></Button>
+</LinearLayout>
