@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:background="@drawable/background">
+	<TextView android:layout_marginTop="100dp" android:text="User name:"
+		style="@style/large_textview"></TextView>
+	<EditText android:layout_width="match_parent" android:id="@+id/username"
+		style="@style/large_edittext">
+		<requestFocus></requestFocus>
+	</EditText>
+	<TextView android:text="Password:" style="@style/large_textview"></TextView>
+	<EditText android:layout_width="match_parent" android:id="@+id/password"
+		style="@style/large_edittext" android:inputType="text"
+		android:password="true"></EditText>
+	<TextView android:text="Re-enter password:" style="@style/large_textview"></TextView>
+	<EditText android:id="@+id/reenterpassword" style="@style/large_edittext" 
+		android:inputType="text" android:password="true"></EditText>
+	<Button android:id="@+id/btn_submit" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="SUBMIT"
+		android:layout_height="50dp" android:onClick="onSubmitClick"></Button>
+	<Button android:id="@+id/btn_back" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="BACK" android:layout_height="50dp"
+		android:onClick="onBackClick"></Button>
+</LinearLayout>

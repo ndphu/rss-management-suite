@@ -6,9 +6,7 @@ public class ApplicationData {
 	private String m_cookie;
 	private String m_host;
 	private int m_port;
-
-	ApplicationData() {
-	}
+	private String m_serviceName;
 
 	public String getUsername() {
 		return m_username;
@@ -48,5 +46,17 @@ public class ApplicationData {
 
 	public void setHost(String host) {
 		this.m_host = host;
+	}
+
+	public String getRequestURL() {
+		return "http://" + m_host + ":" + String.valueOf(m_port) + "/" + m_serviceName;
+	}
+
+	public String getServiceName() {
+		return m_serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.m_serviceName = serviceName;
 	}
 }

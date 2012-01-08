@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="match_parent"
+	android:layout_height="match_parent" android:gravity="center_horizontal"
+	android:background="@drawable/background">
+	<TextView android:text="User name:" style="@style/large_textview"
+		android:layout_marginTop="120dp" />
+	<EditText android:id="@+id/username" style="@style/large_edittext"
+		android:text="ndphu" />
+	<TextView android:text="Password:" style="@style/large_textview" />
+	<EditText android:id="@+id/password" style="@style/large_edittext"
+		android:password="true" android:text="123" />
+	<Button android:id="@+id/btn_login" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="LOGIN"
+		android:layout_height="50dp" android:onClick="onLoginClick"></Button>
+	<Button android:id="@+id/btn_register" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="REGISTER"
+		android:layout_height="50dp" android:onClick="onRegisterClick"></Button>
+	<Button android:id="@+id/btn_exit" android:layout_marginTop="10dp"
+		style="@style/large_button" android:text="EXIT" android:layout_height="50dp"
+		android:onClick="onExitClick"></Button>
+</LinearLayout>
