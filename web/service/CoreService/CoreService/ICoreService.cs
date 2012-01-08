@@ -27,6 +27,8 @@ namespace CoreService
         bool RenameTab(int tabID, string newName);
 
         TabDTO[] GetAllTabs();
+
+        TabDTO[] GetAllSharedTabs();
         #endregion Phu
 
         #region Deo

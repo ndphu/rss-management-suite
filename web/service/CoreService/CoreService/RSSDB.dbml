@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RSSManagementSuite" Class="RSSDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=MINHQUAN-PC;Initial Catalog=RSSManagementSuite;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="RSSManagementSuiteConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=NDPHU-PC\SQLEXPRESS;Initial Catalog=RSSManagementSuite;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="RSSManagementSuiteConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Account" Member="Accounts">
     <Type Name="Account">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />

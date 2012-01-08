@@ -39,7 +39,7 @@ namespace CoreService
                 else
                     result = false;
             }
-            catch
+            catch 
             {
                 result = false;
             }
@@ -251,13 +251,47 @@ namespace CoreService
                     TabDTO tabdto = new TabDTO();
                     tabdto.Id = tab.ID;
                     tabdto.Name = tab.Name;
-                    tabdto.UserID = tab.UserID;
+                    tabdto.OwnerID = tab.UserID;
+                    tabdto.OwnerUsername = tab.Account.Username;
                     result.Add(tabdto);
                 }
             }
             catch
             {
                 
+            }
+            finally
+            {
+            }
+            return result.ToArray();
+        }
+
+        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+        public TabDTO[] GetAllSharedTabs()
+        {
+            List<TabDTO> result = new List<TabDTO>();
+            try
+            {
+                RSSDBDataContext dt = new RSSDBDataContext();
+                int currentUserID = GetCurrentUserID();
+
+                var tabs = dt.Shares.Where(share => share.AccountID == currentUserID).Select(_share => _share.Tab);
+                
+                List<Tab> list = tabs.ToList();
+                foreach (Tab tab in list)
+                {
+                    TabDTO tabdto = new TabDTO();
+                    tabdto.Id = tab.ID;
+                    tabdto.Name = tab.Name;
+                    tabdto.OwnerID = tab.UserID;
+                    tabdto.OwnerUsername = tab.Account.Username;
+                    result.Add(tabdto);
+                }
+            }
+            catch
+            {
+
             }
             finally
             {
