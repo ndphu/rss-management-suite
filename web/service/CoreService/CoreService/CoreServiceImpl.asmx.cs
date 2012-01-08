@@ -5,6 +5,9 @@ using System.Web;
 using System.Web.Services;
 using System.Web.Security;
 using System.Security.Permissions;
+using System.Net;
+using System.IO;
+using System.Xml;
 
 namespace CoreService
 {
@@ -260,24 +263,184 @@ namespace CoreService
 
         #region Deo
         [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public bool AddRSSItem(int tabid, string name, string description, string rsslink)
         {
-            throw new NotImplementedException();
+            bool result = true;
+            try
+            {
+                if (IsExist(rsslink))
+                    throw new Exception("This RSS-Link has been existed!");
+
+                string nameStr = "";
+                string descriptionStr = "";
+
+                if (!IsValid(rsslink, ref nameStr, ref descriptionStr))
+                    throw new Exception("This RSS-Link is invalid!");
+
+                RSSDBDataContext data = new RSSDBDataContext();
+                Tab tabToInsert = (from tab in data.Tabs
+                                   where tab.ID == tabid
+                                   select tab).Single();
+
+                RSSItem newRssItem = new RSSItem();
+                newRssItem.Name = nameStr;
+                newRssItem.Description = descriptionStr;
+                newRssItem.RSSLink = rsslink;
+                newRssItem.TabID = tabid;
+
+                tabToInsert.RSSItems.Add(newRssItem);
+
+                data.SubmitChanges();
+            }
+            catch
+            {
+                result = false;
+            }
+            finally
+            {
+ 
+            }
+            return result;
         }
+
+        private bool IsExist(string newRssLink)
+        {
+            RSSDBDataContext data = new RSSDBDataContext();
+            List<RSSItem> listOfItem = (from rssitem in data.RSSItems
+                                        where rssitem.RSSLink == newRssLink
+                                        select rssitem).ToList();
+            if (listOfItem.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsValid(string newRssLink, ref string nameStr, ref string descriptionStr)
+        {
+            bool result = true;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(newRssLink);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(reader.ReadToEnd());
+
+                XmlNode rssNode = doc.DocumentElement.SelectSingleNode("//rss");
+                XmlNode channelNode = rssNode.SelectSingleNode("./channel");
+
+                XmlNode titleNode = channelNode.SelectSingleNode("./title");
+                XmlNode linkNode = channelNode.SelectSingleNode("./link");
+                XmlNode descriptionNode = channelNode.SelectSingleNode("./description");
+
+                XmlNodeList listOfItem = channelNode.SelectNodes(".//item");
+
+                if (titleNode == null || descriptionNode == null || linkNode == null || listOfItem.Count == 0)
+                    result = false;
+
+                nameStr = titleNode.InnerText;
+                descriptionStr = descriptionNode.InnerText;
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
+
         [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public bool RemoveRSSItem(int rssid)
         {
-            throw new NotImplementedException();
+            bool result = true;
+            try
+            {
+                RSSDBDataContext data = new RSSDBDataContext();
+                RSSItem item = (from rssitem in data.RSSItems
+                                where rssitem.ID == rssid
+                                select rssitem).Single();
+                data.RSSItems.DeleteOnSubmit(item);
+                data.SubmitChanges();
+            }
+            catch
+            {
+                result = false;
+            }
+            finally
+            {
+ 
+            }
+            return result;
         }
+
         [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public RSSItem[] GetAllRSSItems(int tabid)
         {
-            throw new NotImplementedException();
+            RSSItem[] listOfItem = null;
+            try
+            {
+                RSSDBDataContext data = new RSSDBDataContext();
+                listOfItem = (from rssItem in data.RSSItems
+                              where rssItem.TabID == tabid
+                              select rssItem).ToArray();
+            }
+            catch
+            {
+                listOfItem = null;
+            }
+            finally
+            {
+                
+            }
+            return listOfItem;
         }
+
         [WebMethod]
         public string GetRSSResult(int rssid, int count)
         {
-            throw new NotImplementedException();
+            string resultStr = "";
+            try
+            {
+                RSSDBDataContext data = new RSSDBDataContext();
+                RSSItem item = (from rssitem in data.RSSItems
+                                where rssitem.ID == rssid
+                                select rssitem).Single();
+                string rssLink = item.RSSLink;
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rssLink);
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(reader.ReadToEnd());
+
+                XmlNode rssNode = doc.DocumentElement.SelectSingleNode("//rss");
+                XmlNode channelNode = rssNode.SelectSingleNode("./channel");
+
+                XmlNodeList listOfItemnNode = channelNode.SelectNodes(".//item");
+                int nItemNode = listOfItemnNode.Count;
+
+                for (int i = count; i < nItemNode; i++)
+                {
+                    if (i < 0)
+                        continue;
+                    channelNode.RemoveChild(listOfItemnNode[i]);
+                }
+                resultStr = doc.OuterXml;
+            }
+            catch
+            {
+                resultStr = "";
+            }
+            finally
+            {
+                
+            }
+            return resultStr;
         }
         #endregion Deo
 
