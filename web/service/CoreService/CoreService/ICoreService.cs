@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
+using System.Security.Permissions;
 
 namespace CoreService
 {
@@ -24,7 +26,7 @@ namespace CoreService
 
         bool RenameTab(int tabID, string newName);
 
-        Tab[] GetAllTabs();
+        TabDTO[] GetAllTabs();
         #endregion Phu
 
         #region Deo
@@ -32,7 +34,7 @@ namespace CoreService
 
         bool RemoveRSSItem(int rssid);
 
-        RSSItem[] GetAllRSSItems(int tabID);
+        RSSItemDTO[] GetAllRSSItems(int tabID);
 
         string GetRSSResult(int rssid, int count);
         #endregion Deo

@@ -235,10 +235,9 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public Tab[] GetAllTabs()
+        public TabDTO[] GetAllTabs()
         {
-            Tab[] result = null;
-
+            List<TabDTO> result = new List<TabDTO> ();
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
@@ -246,18 +245,24 @@ namespace CoreService
 
                 var tabs = dt.Tabs.Where(tab => tab.UserID == currentUserID);
 
-                result = tabs.ToArray<Tab>();
+                List<Tab> list = tabs.ToList();
+                foreach (Tab tab in list)
+                {
+                    TabDTO tabdto = new TabDTO();
+                    tabdto.Id = tab.ID;
+                    tabdto.Name = tab.Name;
+                    tabdto.UserID = tab.UserID;
+                    result.Add(tabdto);
+                }
             }
             catch
             {
-                result = new Tab[0];
+                
             }
             finally
             {
             }
-
-            return result;
-
+            return result.ToArray();
         }
         #endregion Phu
 
@@ -378,15 +383,26 @@ namespace CoreService
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public RSSItem[] GetAllRSSItems(int tabid)
+        public RSSItemDTO[] GetAllRSSItems(int tabid)
         {
-            RSSItem[] listOfItem = null;
+            List<RSSItemDTO> listOfItem = new List<RSSItemDTO>();
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext();
-                listOfItem = (from rssItem in data.RSSItems
-                              where rssItem.TabID == tabid
-                              select rssItem).ToArray();
+
+                List<RSSItem> list = (from rssItem in data.RSSItems
+                                      where rssItem.TabID == tabid
+                                      select rssItem).ToList();
+                foreach (RSSItem item in list)
+                {
+                    RSSItemDTO temp = new RSSItemDTO();
+                    temp.Id = item.ID;
+                    temp.Name = item.Name;
+                    temp.Description = item.Description;
+                    temp.RSSLink = item.RSSLink;
+                    temp.TabID = item.TabID;
+                    listOfItem.Add(temp);
+                }
             }
             catch
             {
@@ -396,7 +412,7 @@ namespace CoreService
             {
                 
             }
-            return listOfItem;
+            return listOfItem.ToArray();
         }
 
         [WebMethod]
