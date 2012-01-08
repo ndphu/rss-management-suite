@@ -21,12 +21,20 @@ namespace CoreService
             get { return _name; }
             set { _name = value; }
         }
-        private int _userID;
+        private int _ownerID;
 
-        public int UserID
+        public int OwnerID
         {
-            get { return _userID; }
-            set { _userID = value; }
+            get { return _ownerID; }
+            set { _ownerID = value; }
+        }
+
+        private string _ownerUsername;
+
+        public string OwnerUsername
+        {
+            get { return _ownerUsername; }
+            set { _ownerUsername = value; }
         }
     }
 }
