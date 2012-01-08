@@ -2,8 +2,8 @@
 <publishData>
   <publishProfile publishUrl="C:\Users\NDPhu\Desktop\CoreService" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
     <file relUrl="CoreServiceImpl.asmx" publishTime="01/07/2012 14:00:53" />
-    <file relUrl="bin/CoreService.dll" publishTime="01/09/2012 01:02:45" />
-    <file relUrl="bin/CoreService.pdb" publishTime="01/09/2012 01:02:45" />
+    <file relUrl="bin/CoreService.dll" publishTime="01/09/2012 03:11:52" />
+    <file relUrl="bin/CoreService.pdb" publishTime="01/09/2012 03:11:52" />
     <file relUrl="Web.config" publishTime="01/08/2012 17:59:28" />
   </publishProfile>
 </publishData>
