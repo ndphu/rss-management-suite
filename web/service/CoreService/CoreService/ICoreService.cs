@@ -32,7 +32,7 @@ namespace CoreService
         #endregion Phu
 
         #region Deo
-        bool AddRSSItem(int tabID, string name, string description, string rsslink);
+        int AddRSSItem(int tabID, string rsslink);
 
         bool RemoveRSSItem(int rssid);
 

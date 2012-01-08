@@ -303,20 +303,30 @@ namespace CoreService
         #region Deo
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public bool AddRSSItem(int tabid, string name, string description, string rsslink)
+        // 1 - successful
+        // 2 - existed
+        // 3 - incorrect link
+        // 4 - failed
+        public int AddRSSItem(int tabid, string rsslink)
         {
-            bool result = true;
+            int result = 1;
             try
             {
                 if (IsExist(rsslink))
-                    throw new Exception("This RSS-Link has been existed!");
+                {
+                    result = 2;
+                    return result;
+                }
 
                 string nameStr = "";
                 string descriptionStr = "";
 
                 if (!IsValid(rsslink, ref nameStr, ref descriptionStr))
-                    throw new Exception("This RSS-Link is invalid!");
-
+                {
+                    result = 3;
+                    return result;
+                }
+                
                 RSSDBDataContext data = new RSSDBDataContext();
                 Tab tabToInsert = (from tab in data.Tabs
                                    where tab.ID == tabid
@@ -334,11 +344,11 @@ namespace CoreService
             }
             catch
             {
-                result = false;
+                result = 4;
             }
             finally
             {
- 
+                
             }
             return result;
         }
