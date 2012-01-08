@@ -153,7 +153,8 @@ namespace CoreService
                 RSSDBDataContext dt = new RSSDBDataContext();
 
                 var tabToDelete = dt.Tabs.Single(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
-
+                var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID);
+                dt.Shares.DeleteAllOnSubmit(shares);
                 dt.Tabs.DeleteOnSubmit(tabToDelete);
                 dt.SubmitChanges();
 
@@ -303,18 +304,18 @@ namespace CoreService
         #region Deo
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        // 1 - successful
-        // 2 - existed
-        // 3 - incorrect link
-        // 4 - failed
+        // 0 - successful
+        // 1 - existed
+        // 2 - incorrect link
+        // 3 - failed
         public int AddRSSItem(int tabid, string rsslink)
         {
-            int result = 1;
+            int result = 0;
             try
             {
                 if (IsExist(rsslink))
                 {
-                    result = 2;
+                    result = 1;
                     return result;
                 }
 
@@ -323,7 +324,7 @@ namespace CoreService
 
                 if (!IsValid(rsslink, ref nameStr, ref descriptionStr))
                 {
-                    result = 3;
+                    result = 2;
                     return result;
                 }
                 
@@ -344,7 +345,7 @@ namespace CoreService
             }
             catch
             {
-                result = 4;
+                result = 3;
             }
             finally
             {
