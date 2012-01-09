@@ -182,7 +182,11 @@ namespace CoreService
                     else
                     {
                         var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID);
+
                         dt.Shares.DeleteAllOnSubmit(shares);
+
+                        dt.RSSItems.DeleteAllOnSubmit(tabToDelete.RSSItems);
+
                         dt.Tabs.DeleteOnSubmit(tabToDelete);
                         dt.SubmitChanges();
                         result = 0;
