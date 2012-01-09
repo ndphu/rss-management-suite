@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="CheckValidUsername">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckValidUsernameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CheckValidUsernameResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Register">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RegisterResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RegisterResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="LoginResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Logout">
+        <s:complexType />
+      </s:element>
+      <s:element name="LogoutResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="LogoutResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTab">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tabName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTabResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AddTabResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveTab">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tabid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveTabResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RemoveTabResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ShareTab">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tabid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ShareTabResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ShareTabResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RenameTab">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tabid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="newName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RenameTabResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RenameTabResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTabs">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllTabsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllTabsResult" type="tns:ArrayOfTabDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfTabDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="TabDTO" nillable="true" type="tns:TabDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TabDTO">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="OwnerID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OwnerUsername" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllSharedTabs">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllSharedTabsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllSharedTabsResult" type="tns:ArrayOfTabDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddRSSItem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tabid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="rsslink" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddRSSItemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AddRSSItemResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveRSSItem">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="rssid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RemoveRSSItemResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="RemoveRSSItemResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllRSSItems">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="tabid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllRSSItemsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllRSSItemsResult" type="tns:ArrayOfRSSItemDTO" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfRSSItemDTO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RSSItemDTO" nillable="true" type="tns:RSSItemDTO" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RSSItemDTO">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSLink" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TabID" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRSSResult">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="rssid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="count" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRSSResultResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRSSResultResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRSSResultHTML">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="rssItem" type="tns:RSSItem" />
+            <s:element minOccurs="1" maxOccurs="1" name="count" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="RSSItem">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSLink" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TabID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tab" type="tns:Tab" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Tab">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSItems" type="tns:ArrayOfRSSItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="Shares" type="tns:ArrayOfShare" />
+          <s:element minOccurs="0" maxOccurs="1" name="Account" type="tns:Account" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRSSItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RSSItem" nillable="true" type="tns:RSSItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfShare">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Share" nillable="true" type="tns:Share" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Share">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="TabID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Account" type="tns:Account" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tab" type="tns:Tab" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Account">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Salt" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Shares" type="tns:ArrayOfShare" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tabs" type="tns:ArrayOfTab" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfTab">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Tab" nillable="true" type="tns:Tab" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRSSResultHTMLResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRSSResultHTMLResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllRSSPluginLink">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAllRSSPluginLinkResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllRSSPluginLinkResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CheckValidUsernameSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckValidUsername" />
+  </wsdl:message>
+  <wsdl:message name="CheckValidUsernameSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckValidUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="RegisterSoapIn">
+    <wsdl:part name="parameters" element="tns:Register" />
+  </wsdl:message>
+  <wsdl:message name="RegisterSoapOut">
+    <wsdl:part name="parameters" element="tns:RegisterResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogoutSoapIn">
+    <wsdl:part name="parameters" element="tns:Logout" />
+  </wsdl:message>
+  <wsdl:message name="LogoutSoapOut">
+    <wsdl:part name="parameters" element="tns:LogoutResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddTabSoapIn">
+    <wsdl:part name="parameters" element="tns:AddTab" />
+  </wsdl:message>
+  <wsdl:message name="AddTabSoapOut">
+    <wsdl:part name="parameters" element="tns:AddTabResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveTabSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveTab" />
+  </wsdl:message>
+  <wsdl:message name="RemoveTabSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveTabResponse" />
+  </wsdl:message>
+  <wsdl:message name="ShareTabSoapIn">
+    <wsdl:part name="parameters" element="tns:ShareTab" />
+  </wsdl:message>
+  <wsdl:message name="ShareTabSoapOut">
+    <wsdl:part name="parameters" element="tns:ShareTabResponse" />
+  </wsdl:message>
+  <wsdl:message name="RenameTabSoapIn">
+    <wsdl:part name="parameters" element="tns:RenameTab" />
+  </wsdl:message>
+  <wsdl:message name="RenameTabSoapOut">
+    <wsdl:part name="parameters" element="tns:RenameTabResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTabsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllTabs" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTabsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllTabsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSharedTabsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllSharedTabs" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSharedTabsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllSharedTabsResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddRSSItemSoapIn">
+    <wsdl:part name="parameters" element="tns:AddRSSItem" />
+  </wsdl:message>
+  <wsdl:message name="AddRSSItemSoapOut">
+    <wsdl:part name="parameters" element="tns:AddRSSItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="RemoveRSSItemSoapIn">
+    <wsdl:part name="parameters" element="tns:RemoveRSSItem" />
+  </wsdl:message>
+  <wsdl:message name="RemoveRSSItemSoapOut">
+    <wsdl:part name="parameters" element="tns:RemoveRSSItemResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllRSSItemsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllRSSItems" />
+  </wsdl:message>
+  <wsdl:message name="GetAllRSSItemsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllRSSItemsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRSSResultSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRSSResult" />
+  </wsdl:message>
+  <wsdl:message name="GetRSSResultSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRSSResultResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRSSResultHTMLSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRSSResultHTML" />
+  </wsdl:message>
+  <wsdl:message name="GetRSSResultHTMLSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRSSResultHTMLResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllRSSPluginLinkSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllRSSPluginLink" />
+  </wsdl:message>
+  <wsdl:message name="GetAllRSSPluginLinkSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllRSSPluginLinkResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CoreServiceImplSoap">
+    <wsdl:operation name="CheckValidUsername">
+      <wsdl:input message="tns:CheckValidUsernameSoapIn" />
+      <wsdl:output message="tns:CheckValidUsernameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Register">
+      <wsdl:input message="tns:RegisterSoapIn" />
+      <wsdl:output message="tns:RegisterSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input message="tns:LoginSoapIn" />
+      <wsdl:output message="tns:LoginSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <wsdl:input message="tns:LogoutSoapIn" />
+      <wsdl:output message="tns:LogoutSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTab">
+      <wsdl:input message="tns:AddTabSoapIn" />
+      <wsdl:output message="tns:AddTabSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTab">
+      <wsdl:input message="tns:RemoveTabSoapIn" />
+      <wsdl:output message="tns:RemoveTabSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ShareTab">
+      <wsdl:input message="tns:ShareTabSoapIn" />
+      <wsdl:output message="tns:ShareTabSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RenameTab">
+      <wsdl:input message="tns:RenameTabSoapIn" />
+      <wsdl:output message="tns:RenameTabSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTabs">
+      <wsdl:input message="tns:GetAllTabsSoapIn" />
+      <wsdl:output message="tns:GetAllTabsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSharedTabs">
+      <wsdl:input message="tns:GetAllSharedTabsSoapIn" />
+      <wsdl:output message="tns:GetAllSharedTabsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddRSSItem">
+      <wsdl:input message="tns:AddRSSItemSoapIn" />
+      <wsdl:output message="tns:AddRSSItemSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRSSItem">
+      <wsdl:input message="tns:RemoveRSSItemSoapIn" />
+      <wsdl:output message="tns:RemoveRSSItemSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSItems">
+      <wsdl:input message="tns:GetAllRSSItemsSoapIn" />
+      <wsdl:output message="tns:GetAllRSSItemsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResult">
+      <wsdl:input message="tns:GetRSSResultSoapIn" />
+      <wsdl:output message="tns:GetRSSResultSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResultHTML">
+      <wsdl:input message="tns:GetRSSResultHTMLSoapIn" />
+      <wsdl:output message="tns:GetRSSResultHTMLSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSPluginLink">
+      <wsdl:input message="tns:GetAllRSSPluginLinkSoapIn" />
+      <wsdl:output message="tns:GetAllRSSPluginLinkSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CoreServiceImplSoap" type="tns:CoreServiceImplSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckValidUsername">
+      <soap:operation soapAction="http://tempuri.org/CheckValidUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Register">
+      <soap:operation soapAction="http://tempuri.org/Register" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <soap:operation soapAction="http://tempuri.org/Logout" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTab">
+      <soap:operation soapAction="http://tempuri.org/AddTab" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTab">
+      <soap:operation soapAction="http://tempuri.org/RemoveTab" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShareTab">
+      <soap:operation soapAction="http://tempuri.org/ShareTab" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RenameTab">
+      <soap:operation soapAction="http://tempuri.org/RenameTab" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTabs">
+      <soap:operation soapAction="http://tempuri.org/GetAllTabs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSharedTabs">
+      <soap:operation soapAction="http://tempuri.org/GetAllSharedTabs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRSSItem">
+      <soap:operation soapAction="http://tempuri.org/AddRSSItem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRSSItem">
+      <soap:operation soapAction="http://tempuri.org/RemoveRSSItem" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSItems">
+      <soap:operation soapAction="http://tempuri.org/GetAllRSSItems" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResult">
+      <soap:operation soapAction="http://tempuri.org/GetRSSResult" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResultHTML">
+      <soap:operation soapAction="http://tempuri.org/GetRSSResultHTML" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSPluginLink">
+      <soap:operation soapAction="http://tempuri.org/GetAllRSSPluginLink" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CoreServiceImplSoap12" type="tns:CoreServiceImplSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CheckValidUsername">
+      <soap12:operation soapAction="http://tempuri.org/CheckValidUsername" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Register">
+      <soap12:operation soapAction="http://tempuri.org/Register" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://tempuri.org/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <soap12:operation soapAction="http://tempuri.org/Logout" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTab">
+      <soap12:operation soapAction="http://tempuri.org/AddTab" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveTab">
+      <soap12:operation soapAction="http://tempuri.org/RemoveTab" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ShareTab">
+      <soap12:operation soapAction="http://tempuri.org/ShareTab" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RenameTab">
+      <soap12:operation soapAction="http://tempuri.org/RenameTab" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTabs">
+      <soap12:operation soapAction="http://tempuri.org/GetAllTabs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSharedTabs">
+      <soap12:operation soapAction="http://tempuri.org/GetAllSharedTabs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddRSSItem">
+      <soap12:operation soapAction="http://tempuri.org/AddRSSItem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveRSSItem">
+      <soap12:operation soapAction="http://tempuri.org/RemoveRSSItem" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSItems">
+      <soap12:operation soapAction="http://tempuri.org/GetAllRSSItems" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResult">
+      <soap12:operation soapAction="http://tempuri.org/GetRSSResult" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRSSResultHTML">
+      <soap12:operation soapAction="http://tempuri.org/GetRSSResultHTML" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllRSSPluginLink">
+      <soap12:operation soapAction="http://tempuri.org/GetAllRSSPluginLink" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CoreServiceImpl">
+    <wsdl:port name="CoreServiceImplSoap" binding="tns:CoreServiceImplSoap">
+      <soap:address location="http://localhost:4778/CoreServiceImpl.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CoreServiceImplSoap12" binding="tns:CoreServiceImplSoap12">
+      <soap12:address location="http://localhost:4778/CoreServiceImpl.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

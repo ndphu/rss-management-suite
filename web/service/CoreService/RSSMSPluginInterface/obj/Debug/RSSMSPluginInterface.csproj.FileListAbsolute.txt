@@ -1,5 +1,0 @@
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\RSSMSPluginInterface\bin\Debug\RSSMSPluginInterface.dll
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\RSSMSPluginInterface\bin\Debug\RSSMSPluginInterface.pdb
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\RSSMSPluginInterface\obj\Debug\RSSMSPluginInterface.csprojResolveAssemblyReference.cache
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\RSSMSPluginInterface\obj\Debug\RSSMSPluginInterface.dll
-C:\Users\NDPhu\Desktop\LTHD\web\service\CoreService\RSSMSPluginInterface\obj\Debug\RSSMSPluginInterface.pdb

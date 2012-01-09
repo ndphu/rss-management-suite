@@ -1,0 +1,67 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="RSSReaderWebsite.SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title></title>
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="Form1" runat="server" style="width:100%">
+    <asp:ScriptManager ID="scriptmanager_main" runat="server">
+    </asp:ScriptManager>
+    <div class="page">
+        <div class="header">
+            <div class="title" style="height: 80px">
+                <table style="width: 100%; height: 100%">
+                    <tr>
+                        <td align="left" style="width: 35%" valign="bottom">
+                            <h1 align="left" style="font-family: Arial; color: Yellow">
+                                <span id="master_letter" style="font-family: Charlemagne Std; color: White">YOUR RSS</span>
+                                Reader
+                            </h1>
+                        </td>
+                        <td style="width: 65%" valign="top" align="right">
+                            <table id="tb_LoginTable" style="width: 45%; height: 100%">
+                                <tr valign="bottom">
+                                    <td align="left" style="width: 40%">
+                                        <asp:Label runat="server" ID="lb_UserName" ForeColor="White" Text="User name:"></asp:Label>
+                                    </td>
+                                    <td align="left" style="width: 40%">
+                                        <asp:Label runat="server" ID="lb_Password" ForeColor="White" Text="Password:"></asp:Label>
+                                    </td>
+                                    <td align="left" style="width: 20%">
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <td align="left" style="width: 40%">
+                                        <asp:TextBox ID="tb_UserName" runat="server" Width="90%" MaxLength="14"></asp:TextBox>
+                                    </td>
+                                    <td align="left" style="width: 40%">
+                                        <asp:TextBox ID="tb_Password" runat="server" TextMode="Password" Width="90%" MaxLength="14"></asp:TextBox>
+                                    </td>
+                                    <td align="left" style="width: 20%">
+                                        <asp:Button runat="server" ID="btn_Login" BorderStyle="Ridge" Text="Login" Width="90%"
+                                            OnClick="btn_Login_Click" />
+                                    </td>
+                                    <td align="right" valign="middle">
+                                        <asp:Label ID="lb_CurrentUserName" runat="server" ForeColor="Yellow" Visible="false"></asp:Label>
+                                        <asp:LinkButton ID="lbn_LogOut" runat="server" Text="Logout" ForeColor="White" Visible="false"
+                                            OnClick="lbn_LogOut_Click"></asp:LinkButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+    </div>
+    </form>
+</body>
+</html>
