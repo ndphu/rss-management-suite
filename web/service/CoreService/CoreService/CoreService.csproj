@@ -91,6 +91,12 @@
       <DependentUpon>RSSDB.dbml</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RSSMSPluginInterface\RSSMSPluginInterface.csproj">
+      <Project>{3E0280CB-31E0-41BF-A1CA-9E8258E57EB6}</Project>
+      <Name>RSSMSPluginInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <ProjectExtensions>

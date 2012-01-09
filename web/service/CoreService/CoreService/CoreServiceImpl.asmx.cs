@@ -8,6 +8,8 @@ using System.Security.Permissions;
 using System.Net;
 using System.IO;
 using System.Xml;
+using System.Reflection;
+using RSSMSPluginInterface;
 
 namespace CoreService
 {
@@ -600,7 +602,33 @@ namespace CoreService
         [WebMethod]
         public string[] GetAllRSSPluginLink()
         {
-            throw new NotImplementedException();
+            List<String> result = new List<string>();
+            try
+            {
+                string[] fileNames = Directory.GetFiles(Server.MapPath("~") , "*.dll");
+                foreach (string fileName in fileNames)
+                {
+                    Assembly asm = Assembly.LoadFile(fileName);
+
+                    Type[] types = asm.GetTypes();
+                    foreach (Type type in types)
+                    {
+                        if (type.GetInterface("IRSSPlugin") != null)
+                        {
+                            IRSSPlugin plugin = Activator.CreateInstance(type) as IRSSPlugin;
+                            result.Add(plugin.GetPluginName());
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            result.Add(Server.MapPath("~"));
+
+            return result.ToArray();
+            
         }
         #endregion Advance
 
