@@ -13,7 +13,7 @@
     <asp:ScriptManager ID="scriptmanager_main" runat="server">
     </asp:ScriptManager>
     <div class="page">
-        <div class="header">
+        <div class="header" style="border-style:solid">
             <div class="title" style="height: 80px">
                 <table style="width: 100%; height: 100%">
                     <tr>
@@ -50,6 +50,10 @@
                                         <asp:Label ID="lb_CurrentUserName" runat="server" ForeColor="Yellow" Visible="false"></asp:Label>
                                         <asp:LinkButton ID="lbn_LogOut" runat="server" Text="Logout" ForeColor="White" Visible="false"
                                             OnClick="lbn_LogOut_Click"></asp:LinkButton>
+                                    </td>
+                                    <td align="right" valign="bottom">
+                                        <asp:Image ID="img_User" runat="server" Visible="false" 
+                                            ImageUrl="~/Content/image/User.png"/>
                                     </td>
                                 </tr>
                             </table>

@@ -36,6 +36,7 @@ namespace RSSReaderWebsite
             this.Master.FindControl("tb_UserName").Visible = false;
             this.Master.FindControl("tb_Password").Visible = false;
             this.Master.FindControl("btn_Login").Visible = false;
+            
         }
 
         private void ShowUserInfo()
@@ -47,6 +48,8 @@ namespace RSSReaderWebsite
 
             LinkButton tempLinkBtn = (LinkButton)this.Master.FindControl("lbn_LogOut");
             tempLinkBtn.Visible = true;
+
+            this.Master.FindControl("img_User").Visible = true;
         }
 
         protected void up_TabContent_OnLoad(object sender, EventArgs e)
@@ -65,8 +68,17 @@ namespace RSSReaderWebsite
         private void LoadUserContent()
         {
             TabDTO[] listOfTab = MyProxy.getProxy().GetAllTabs();
+            TabDTO[] listOfSharedTab = MyProxy.getProxy().GetAllSharedTabs();
+
+            List<TabDTO> listOfAllTab = new List<TabDTO>();
+            for (int i = 0; i < listOfTab.Count(); i++)
+                listOfAllTab.Add(listOfTab[i]);
+
+            for (int i = 0; i < listOfSharedTab.Count(); i++)
+                listOfAllTab.Add(listOfSharedTab[i]);
+
             tv_Content.Nodes.Clear();
-            foreach (TabDTO tab in listOfTab)
+            foreach (TabDTO tab in listOfAllTab)
             {
                 TreeNode tnode = new TreeNode(tab.Name, tab.Id.ToString(), "Content/image/Container.png");
                 if (tv_Content_ExpandState.ContainsKey(tab.Id.ToString()))
@@ -86,7 +98,6 @@ namespace RSSReaderWebsite
                 }
             }
         }
-
 
         private void LoadTabContent(TabDTO tabparent, TreeNode tnodeparent)
         {
@@ -110,6 +121,7 @@ namespace RSSReaderWebsite
                 currentTabID = int.Parse(parent.Value);
 
                 LoadRssContent(currentRssItemID, tv.SelectedNode.Text, tv_Content.SelectedNode);
+                HideShareAndRenameUI();
             }
             else
             {
@@ -124,6 +136,8 @@ namespace RSSReaderWebsite
             lbtn_deleteRssItem.Visible = true;
             lbtn_deleteTab.Visible = false;
             lbtn_shareTab.Visible = false;
+            lbtn_Rename.Visible = false;
+
             currentRssItem = currentNode;
 
             lb_currentPath.Text = target;
@@ -183,6 +197,7 @@ namespace RSSReaderWebsite
             lbtn_deleteRssItem.Visible = false;
             lbtn_deleteTab.Visible = true;
             lbtn_shareTab.Visible = true;
+            lbtn_Rename.Visible = true;
 
             lb_currentPath.Text = target;
 
@@ -280,8 +295,15 @@ namespace RSSReaderWebsite
                         lb_addResult.ForeColor = System.Drawing.Color.Red;
                         lb_addResult.Text = "  This link is incorrect!";
                         break;
+
                     }
                 case 3:
+                    {
+                        lb_addResult.ForeColor = System.Drawing.Color.Red;
+                        lb_addResult.Text = "  Different Onwer!";
+                        break;
+                    }
+                case 4:
                     {
                         lb_addResult.ForeColor = System.Drawing.Color.Red;
                         lb_addResult.Text = "  Fail!";
@@ -353,6 +375,10 @@ namespace RSSReaderWebsite
                     LoadUserContent();
                     LoadTabContent(tabParent.Text);
                 }
+            }
+            else
+            {
+ 
             }
         }
 
@@ -436,6 +462,177 @@ namespace RSSReaderWebsite
                     }
                 case 3:
                     {
+                        break;
+                    }
+            }
+        }
+
+        protected void lbtn_shareTab_Click(object sender, EventArgs e)
+        {
+            ShowShareUI();
+        }
+
+        private void ShowShareUI()
+        {
+            lb_UserNameToShare.Visible = true;
+            tb_UserNameToShare.Visible = true;
+            btn_ShareTab.Visible = true;
+            lbtn_HideShareUI.Visible = true;
+            //vld_ShareTab.Visible = true;
+            lb_ShareResult.Visible = true;
+            lb_ShareResult.Text = "";
+
+            lb_NewTabName.Visible = false;
+            tb_NewTabName.Visible = false;
+            btn_RenameTab.Visible = false;
+            lbtn_HideRenameUI.Visible = false;
+            //vld_RenameTab.Visible = false;
+            lb_RenameResult.Visible = false;
+        }
+
+        private void HideShareAndRenameUI()
+        {
+            lb_UserNameToShare.Visible = false;
+            tb_UserNameToShare.Visible = false;
+            btn_ShareTab.Visible = false;
+            lbtn_HideShareUI.Visible = false;
+            //vld_ShareTab.Visible = false;
+            lb_ShareResult.Visible = false;
+
+            lb_NewTabName.Visible = false;
+            tb_NewTabName.Visible = false;
+            btn_RenameTab.Visible = false;
+            lbtn_HideRenameUI.Visible = false;
+            //vld_RenameTab.Visible = false;
+            lb_RenameResult.Visible = false;
+        }
+
+        private void ShowRenameUI()
+        {
+            lb_UserNameToShare.Visible = false;
+            tb_UserNameToShare.Visible = false;
+            btn_ShareTab.Visible = false;
+            lbtn_HideShareUI.Visible = false;
+            //vld_ShareTab.Visible = false;
+            lb_ShareResult.Visible = false;
+
+            lb_NewTabName.Visible = true;
+            tb_NewTabName.Visible = true;
+            btn_RenameTab.Visible = true;
+            lbtn_HideRenameUI.Visible = true;
+            //vld_RenameTab.Visible = true;
+            lb_RenameResult.Visible = true;
+            lb_RenameResult.Text = "";
+        }
+
+        protected void lbtn_Rename_Click(object sender, EventArgs e)
+        {
+            ShowRenameUI();
+        }
+
+        protected void lbtn_HideShareUI_Click(object sender, EventArgs e)
+        {
+            HideShareAndRenameUI();
+        }
+
+        protected void lbtn_HideRenameUI_Click(object sender, EventArgs e)
+        {
+            HideShareAndRenameUI();
+        }
+
+        protected void btn_ShareTab_Click(object sender, EventArgs e)
+        {
+            string userName = tb_UserNameToShare.Text.Trim();
+            if (userName == "")
+            {
+                lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                lb_ShareResult.Text = "This user-name is empty";
+                return;
+            }
+            int result = MyProxy.getProxy().ShareTab(currentTabID, userName);
+            switch (result)
+            {
+                case 0:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Green;
+                        lb_ShareResult.Text = "Done!";
+                        break;
+                    }
+                case 1:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                        lb_ShareResult.Text = "Different owner!";
+                        break;
+                    }
+                case 2:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                        lb_ShareResult.Text = "This tab doesn't exist!";
+                        break;
+                    }
+                case 3:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                        lb_ShareResult.Text = "Doesn't exist!";
+                        break;
+                    }
+                case 4:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                        lb_ShareResult.Text = "Can't share yourseft!";
+                        break;
+                    }
+                case 5:
+                    {
+                        lb_ShareResult.ForeColor = System.Drawing.Color.Red;
+                        lb_ShareResult.Text = "Fail!";
+                        break;
+                    }
+            }
+        }
+
+        protected void btn_RenameTab_Click(object sender, EventArgs e)
+        {
+            string newTabName = tb_NewTabName.Text.Trim();
+            if (newTabName == "")
+            {
+                lb_RenameResult.ForeColor = System.Drawing.Color.Red;
+                lb_RenameResult.Text = "Tab-name is empty!";
+                return;
+            }
+            int result = MyProxy.getProxy().RenameTab(currentTabID, newTabName);
+            switch(result)
+            {
+                case 0:
+                    {
+                        lb_RenameResult.ForeColor = System.Drawing.Color.Green;
+                        lb_RenameResult.Text = "Done!";
+                        RestoreTreeViewState();
+                        LoadUserContent();
+                        break;
+                    }
+                case 1:
+                    {
+                        lb_RenameResult.ForeColor = System.Drawing.Color.Red;
+                        lb_RenameResult.Text = "Different owner!";
+                        break;
+                    }
+                case 2:
+                    {
+                        lb_RenameResult.ForeColor = System.Drawing.Color.Red;
+                        lb_RenameResult.Text = "Doesn't exist!";
+                        break;
+                    }
+                case 3:
+                    {
+                        lb_RenameResult.ForeColor = System.Drawing.Color.Red;
+                        lb_RenameResult.Text = "Duplicate name!";
+                        break;
+                    }
+                case 4:
+                    {
+                        lb_RenameResult.ForeColor = System.Drawing.Color.Red;
+                        lb_RenameResult.Text = "Fail!";
                         break;
                     }
             }

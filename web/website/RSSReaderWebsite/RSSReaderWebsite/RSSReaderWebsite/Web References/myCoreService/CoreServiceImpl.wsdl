@@ -135,6 +135,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="OwnerID" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="OwnerUsername" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ChildCount" type="s:int" />
         </s:sequence>
       </s:complexType>
       <s:element name="GetAllSharedTabs">
@@ -234,7 +235,9 @@
           <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="RSSLink" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="TabID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PluginID" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="Tab" type="tns:Tab" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSPlugin" type="tns:RSSPlugin" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="Tab">
@@ -242,14 +245,9 @@
           <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="RSSItems" type="tns:ArrayOfRSSItem" />
           <s:element minOccurs="0" maxOccurs="1" name="Shares" type="tns:ArrayOfShare" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSItems" type="tns:ArrayOfRSSItem" />
           <s:element minOccurs="0" maxOccurs="1" name="Account" type="tns:Account" />
-        </s:sequence>
-      </s:complexType>
-      <s:complexType name="ArrayOfRSSItem">
-        <s:sequence>
-          <s:element minOccurs="0" maxOccurs="unbounded" name="RSSItem" nillable="true" type="tns:RSSItem" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="ArrayOfShare">
@@ -262,8 +260,8 @@
           <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="AccountID" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="TabID" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="Account" type="tns:Account" />
           <s:element minOccurs="0" maxOccurs="1" name="Tab" type="tns:Tab" />
+          <s:element minOccurs="0" maxOccurs="1" name="Account" type="tns:Account" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="Account">
@@ -272,13 +270,28 @@
           <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Salt" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="Shares" type="tns:ArrayOfShare" />
           <s:element minOccurs="0" maxOccurs="1" name="Tabs" type="tns:ArrayOfTab" />
+          <s:element minOccurs="0" maxOccurs="1" name="Shares" type="tns:ArrayOfShare" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="ArrayOfTab">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="unbounded" name="Tab" nillable="true" type="tns:Tab" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRSSItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="RSSItem" nillable="true" type="tns:RSSItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="RSSPlugin">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WebsiteLink" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DLLName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RSSItems" type="tns:ArrayOfRSSItem" />
         </s:sequence>
       </s:complexType>
       <s:element name="GetRSSResultHTMLResponse">

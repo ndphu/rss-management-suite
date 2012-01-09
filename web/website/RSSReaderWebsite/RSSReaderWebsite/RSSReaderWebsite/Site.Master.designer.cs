@@ -103,6 +103,15 @@ namespace RSSReaderWebsite {
         protected global::System.Web.UI.WebControls.LinkButton lbn_LogOut;
         
         /// <summary>
+        /// img_User control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image img_User;
+        
+        /// <summary>
         /// MainContent control.
         /// </summary>
         /// <remarks>

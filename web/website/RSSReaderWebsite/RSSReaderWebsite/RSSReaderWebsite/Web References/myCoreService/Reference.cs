@@ -652,6 +652,8 @@ namespace RSSReaderWebsite.myCoreService {
         
         private string ownerUsernameField;
         
+        private int childCountField;
+        
         /// <remarks/>
         public int Id {
             get {
@@ -691,85 +693,14 @@ namespace RSSReaderWebsite.myCoreService {
                 this.ownerUsernameField = value;
             }
         }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Account {
-        
-        private int idField;
-        
-        private string usernameField;
-        
-        private string passwordField;
-        
-        private int saltField;
-        
-        private Share[] sharesField;
-        
-        private Tab[] tabsField;
         
         /// <remarks/>
-        public int ID {
+        public int ChildCount {
             get {
-                return this.idField;
+                return this.childCountField;
             }
             set {
-                this.idField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Username {
-            get {
-                return this.usernameField;
-            }
-            set {
-                this.usernameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string Password {
-            get {
-                return this.passwordField;
-            }
-            set {
-                this.passwordField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public int Salt {
-            get {
-                return this.saltField;
-            }
-            set {
-                this.saltField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Share[] Shares {
-            get {
-                return this.sharesField;
-            }
-            set {
-                this.sharesField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Tab[] Tabs {
-            get {
-                return this.tabsField;
-            }
-            set {
-                this.tabsField = value;
+                this.childCountField = value;
             }
         }
     }
@@ -780,88 +711,19 @@ namespace RSSReaderWebsite.myCoreService {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Share {
-        
-        private int idField;
-        
-        private int accountIDField;
-        
-        private int tabIDField;
-        
-        private Account accountField;
-        
-        private Tab tabField;
-        
-        /// <remarks/>
-        public int ID {
-            get {
-                return this.idField;
-            }
-            set {
-                this.idField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public int AccountID {
-            get {
-                return this.accountIDField;
-            }
-            set {
-                this.accountIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public int TabID {
-            get {
-                return this.tabIDField;
-            }
-            set {
-                this.tabIDField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Account Account {
-            get {
-                return this.accountField;
-            }
-            set {
-                this.accountField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Tab Tab {
-            get {
-                return this.tabField;
-            }
-            set {
-                this.tabField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Tab {
+    public partial class RSSPlugin {
         
         private int idField;
         
         private string nameField;
         
-        private int userIDField;
+        private string descriptionField;
+        
+        private string websiteLinkField;
+        
+        private string dLLNameField;
         
         private RSSItem[] rSSItemsField;
-        
-        private Share[] sharesField;
-        
-        private Account accountField;
         
         /// <remarks/>
         public int ID {
@@ -884,12 +746,32 @@ namespace RSSReaderWebsite.myCoreService {
         }
         
         /// <remarks/>
-        public int UserID {
+        public string Description {
             get {
-                return this.userIDField;
+                return this.descriptionField;
             }
             set {
-                this.userIDField = value;
+                this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string WebsiteLink {
+            get {
+                return this.websiteLinkField;
+            }
+            set {
+                this.websiteLinkField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string DLLName {
+            get {
+                return this.dLLNameField;
+            }
+            set {
+                this.dLLNameField = value;
             }
         }
         
@@ -900,26 +782,6 @@ namespace RSSReaderWebsite.myCoreService {
             }
             set {
                 this.rSSItemsField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Share[] Shares {
-            get {
-                return this.sharesField;
-            }
-            set {
-                this.sharesField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public Account Account {
-            get {
-                return this.accountField;
-            }
-            set {
-                this.accountField = value;
             }
         }
     }
@@ -942,7 +804,11 @@ namespace RSSReaderWebsite.myCoreService {
         
         private int tabIDField;
         
+        private int pluginIDField;
+        
         private Tab tabField;
+        
+        private RSSPlugin rSSPluginField;
         
         /// <remarks/>
         public int ID {
@@ -995,12 +861,263 @@ namespace RSSReaderWebsite.myCoreService {
         }
         
         /// <remarks/>
+        public int PluginID {
+            get {
+                return this.pluginIDField;
+            }
+            set {
+                this.pluginIDField = value;
+            }
+        }
+        
+        /// <remarks/>
         public Tab Tab {
             get {
                 return this.tabField;
             }
             set {
                 this.tabField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public RSSPlugin RSSPlugin {
+            get {
+                return this.rSSPluginField;
+            }
+            set {
+                this.rSSPluginField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Tab {
+        
+        private int idField;
+        
+        private string nameField;
+        
+        private int userIDField;
+        
+        private Share[] sharesField;
+        
+        private RSSItem[] rSSItemsField;
+        
+        private Account accountField;
+        
+        /// <remarks/>
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int UserID {
+            get {
+                return this.userIDField;
+            }
+            set {
+                this.userIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Share[] Shares {
+            get {
+                return this.sharesField;
+            }
+            set {
+                this.sharesField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public RSSItem[] RSSItems {
+            get {
+                return this.rSSItemsField;
+            }
+            set {
+                this.rSSItemsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Account Account {
+            get {
+                return this.accountField;
+            }
+            set {
+                this.accountField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Share {
+        
+        private int idField;
+        
+        private int accountIDField;
+        
+        private int tabIDField;
+        
+        private Tab tabField;
+        
+        private Account accountField;
+        
+        /// <remarks/>
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int AccountID {
+            get {
+                return this.accountIDField;
+            }
+            set {
+                this.accountIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int TabID {
+            get {
+                return this.tabIDField;
+            }
+            set {
+                this.tabIDField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Tab Tab {
+            get {
+                return this.tabField;
+            }
+            set {
+                this.tabField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Account Account {
+            get {
+                return this.accountField;
+            }
+            set {
+                this.accountField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.1")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+    public partial class Account {
+        
+        private int idField;
+        
+        private string usernameField;
+        
+        private string passwordField;
+        
+        private int saltField;
+        
+        private Tab[] tabsField;
+        
+        private Share[] sharesField;
+        
+        /// <remarks/>
+        public int ID {
+            get {
+                return this.idField;
+            }
+            set {
+                this.idField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Username {
+            get {
+                return this.usernameField;
+            }
+            set {
+                this.usernameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string Password {
+            get {
+                return this.passwordField;
+            }
+            set {
+                this.passwordField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public int Salt {
+            get {
+                return this.saltField;
+            }
+            set {
+                this.saltField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Tab[] Tabs {
+            get {
+                return this.tabsField;
+            }
+            set {
+                this.tabsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public Share[] Shares {
+            get {
+                return this.sharesField;
+            }
+            set {
+                this.sharesField = value;
             }
         }
     }
