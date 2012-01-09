@@ -33,15 +33,18 @@ namespace CoreService
     partial void InsertAccount(Account instance);
     partial void UpdateAccount(Account instance);
     partial void DeleteAccount(Account instance);
-    partial void InsertRSSItem(RSSItem instance);
-    partial void UpdateRSSItem(RSSItem instance);
-    partial void DeleteRSSItem(RSSItem instance);
-    partial void InsertShare(Share instance);
-    partial void UpdateShare(Share instance);
-    partial void DeleteShare(Share instance);
     partial void InsertTab(Tab instance);
     partial void UpdateTab(Tab instance);
     partial void DeleteTab(Tab instance);
+    partial void InsertRSSItem(RSSItem instance);
+    partial void UpdateRSSItem(RSSItem instance);
+    partial void DeleteRSSItem(RSSItem instance);
+    partial void InsertRSSPlugin(RSSPlugin instance);
+    partial void UpdateRSSPlugin(RSSPlugin instance);
+    partial void DeleteRSSPlugin(RSSPlugin instance);
+    partial void InsertShare(Share instance);
+    partial void UpdateShare(Share instance);
+    partial void DeleteShare(Share instance);
     #endregion
 		
 		public RSSDBDataContext() : 
@@ -82,6 +85,14 @@ namespace CoreService
 			}
 		}
 		
+		public System.Data.Linq.Table<Tab> Tabs
+		{
+			get
+			{
+				return this.GetTable<Tab>();
+			}
+		}
+		
 		public System.Data.Linq.Table<RSSItem> RSSItems
 		{
 			get
@@ -90,19 +101,19 @@ namespace CoreService
 			}
 		}
 		
+		public System.Data.Linq.Table<RSSPlugin> RSSPlugins
+		{
+			get
+			{
+				return this.GetTable<RSSPlugin>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Share> Shares
 		{
 			get
 			{
 				return this.GetTable<Share>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Tab> Tabs
-		{
-			get
-			{
-				return this.GetTable<Tab>();
 			}
 		}
 	}
@@ -121,9 +132,9 @@ namespace CoreService
 		
 		private int _Salt;
 		
-		private EntitySet<Share> _Shares;
-		
 		private EntitySet<Tab> _Tabs;
+		
+		private EntitySet<Share> _Shares;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -141,8 +152,8 @@ namespace CoreService
 		
 		public Account()
 		{
-			this._Shares = new EntitySet<Share>(new Action<Share>(this.attach_Shares), new Action<Share>(this.detach_Shares));
 			this._Tabs = new EntitySet<Tab>(new Action<Tab>(this.attach_Tabs), new Action<Tab>(this.detach_Tabs));
+			this._Shares = new EntitySet<Share>(new Action<Share>(this.attach_Shares), new Action<Share>(this.detach_Shares));
 			OnCreated();
 		}
 		
@@ -226,19 +237,6 @@ namespace CoreService
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Share", Storage="_Shares", ThisKey="ID", OtherKey="AccountID")]
-		public EntitySet<Share> Shares
-		{
-			get
-			{
-				return this._Shares;
-			}
-			set
-			{
-				this._Shares.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Tab", Storage="_Tabs", ThisKey="ID", OtherKey="UserID")]
 		public EntitySet<Tab> Tabs
 		{
@@ -252,6 +250,19 @@ namespace CoreService
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Share", Storage="_Shares", ThisKey="ID", OtherKey="AccountID")]
+		public EntitySet<Share> Shares
+		{
+			get
+			{
+				return this._Shares;
+			}
+			set
+			{
+				this._Shares.Assign(value);
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -270,18 +281,6 @@ namespace CoreService
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-		
-		private void attach_Shares(Share entity)
-		{
-			this.SendPropertyChanging();
-			entity.Account = this;
-		}
-		
-		private void detach_Shares(Share entity)
-		{
-			this.SendPropertyChanging();
-			entity.Account = null;
 		}
 		
 		private void attach_Tabs(Tab entity)
@@ -295,396 +294,17 @@ namespace CoreService
 			this.SendPropertyChanging();
 			entity.Account = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RSSItem")]
-	public partial class RSSItem : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private string _Description;
-		
-		private string _RSSLink;
-		
-		private int _TabID;
-		
-		private EntityRef<Tab> _Tab;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnRSSLinkChanging(string value);
-    partial void OnRSSLinkChanged();
-    partial void OnTabIDChanging(int value);
-    partial void OnTabIDChanged();
-    #endregion
-		
-		public RSSItem()
+		private void attach_Shares(Share entity)
 		{
-			this._Tab = default(EntityRef<Tab>);
-			OnCreated();
+			this.SendPropertyChanging();
+			entity.Account = this;
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
+		private void detach_Shares(Share entity)
 		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RSSLink", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
-		public string RSSLink
-		{
-			get
-			{
-				return this._RSSLink;
-			}
-			set
-			{
-				if ((this._RSSLink != value))
-				{
-					this.OnRSSLinkChanging(value);
-					this.SendPropertyChanging();
-					this._RSSLink = value;
-					this.SendPropertyChanged("RSSLink");
-					this.OnRSSLinkChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TabID", DbType="Int NOT NULL")]
-		public int TabID
-		{
-			get
-			{
-				return this._TabID;
-			}
-			set
-			{
-				if ((this._TabID != value))
-				{
-					if (this._Tab.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTabIDChanging(value);
-					this.SendPropertyChanging();
-					this._TabID = value;
-					this.SendPropertyChanged("TabID");
-					this.OnTabIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Tab_RSSItem", Storage="_Tab", ThisKey="TabID", OtherKey="ID", IsForeignKey=true)]
-		public Tab Tab
-		{
-			get
-			{
-				return this._Tab.Entity;
-			}
-			set
-			{
-				Tab previousValue = this._Tab.Entity;
-				if (((previousValue != value) 
-							|| (this._Tab.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Tab.Entity = null;
-						previousValue.RSSItems.Remove(this);
-					}
-					this._Tab.Entity = value;
-					if ((value != null))
-					{
-						value.RSSItems.Add(this);
-						this._TabID = value.ID;
-					}
-					else
-					{
-						this._TabID = default(int);
-					}
-					this.SendPropertyChanged("Tab");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Share")]
-	public partial class Share : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private int _AccountID;
-		
-		private int _TabID;
-		
-		private EntityRef<Account> _Account;
-		
-		private EntityRef<Tab> _Tab;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnAccountIDChanging(int value);
-    partial void OnAccountIDChanged();
-    partial void OnTabIDChanging(int value);
-    partial void OnTabIDChanged();
-    #endregion
-		
-		public Share()
-		{
-			this._Account = default(EntityRef<Account>);
-			this._Tab = default(EntityRef<Tab>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
-		public int AccountID
-		{
-			get
-			{
-				return this._AccountID;
-			}
-			set
-			{
-				if ((this._AccountID != value))
-				{
-					if (this._Account.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccountIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccountID = value;
-					this.SendPropertyChanged("AccountID");
-					this.OnAccountIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TabID", DbType="Int NOT NULL")]
-		public int TabID
-		{
-			get
-			{
-				return this._TabID;
-			}
-			set
-			{
-				if ((this._TabID != value))
-				{
-					if (this._Tab.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnTabIDChanging(value);
-					this.SendPropertyChanging();
-					this._TabID = value;
-					this.SendPropertyChanged("TabID");
-					this.OnTabIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Share", Storage="_Account", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
-		public Account Account
-		{
-			get
-			{
-				return this._Account.Entity;
-			}
-			set
-			{
-				Account previousValue = this._Account.Entity;
-				if (((previousValue != value) 
-							|| (this._Account.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Account.Entity = null;
-						previousValue.Shares.Remove(this);
-					}
-					this._Account.Entity = value;
-					if ((value != null))
-					{
-						value.Shares.Add(this);
-						this._AccountID = value.ID;
-					}
-					else
-					{
-						this._AccountID = default(int);
-					}
-					this.SendPropertyChanged("Account");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Tab_Share", Storage="_Tab", ThisKey="TabID", OtherKey="ID", IsForeignKey=true)]
-		public Tab Tab
-		{
-			get
-			{
-				return this._Tab.Entity;
-			}
-			set
-			{
-				Tab previousValue = this._Tab.Entity;
-				if (((previousValue != value) 
-							|| (this._Tab.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Tab.Entity = null;
-						previousValue.Shares.Remove(this);
-					}
-					this._Tab.Entity = value;
-					if ((value != null))
-					{
-						value.Shares.Add(this);
-						this._TabID = value.ID;
-					}
-					else
-					{
-						this._TabID = default(int);
-					}
-					this.SendPropertyChanged("Tab");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
+			this.SendPropertyChanging();
+			entity.Account = null;
 		}
 	}
 	
@@ -892,6 +512,648 @@ namespace CoreService
 		{
 			this.SendPropertyChanging();
 			entity.Tab = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RSSItem")]
+	public partial class RSSItem : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private string _RSSLink;
+		
+		private int _TabID;
+		
+		private int _PluginID;
+		
+		private EntityRef<Tab> _Tab;
+		
+		private EntityRef<RSSPlugin> _RSSPlugin;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnRSSLinkChanging(string value);
+    partial void OnRSSLinkChanged();
+    partial void OnTabIDChanging(int value);
+    partial void OnTabIDChanged();
+    partial void OnPluginIDChanging(int value);
+    partial void OnPluginIDChanged();
+    #endregion
+		
+		public RSSItem()
+		{
+			this._Tab = default(EntityRef<Tab>);
+			this._RSSPlugin = default(EntityRef<RSSPlugin>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RSSLink", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string RSSLink
+		{
+			get
+			{
+				return this._RSSLink;
+			}
+			set
+			{
+				if ((this._RSSLink != value))
+				{
+					this.OnRSSLinkChanging(value);
+					this.SendPropertyChanging();
+					this._RSSLink = value;
+					this.SendPropertyChanged("RSSLink");
+					this.OnRSSLinkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TabID", DbType="Int NOT NULL")]
+		public int TabID
+		{
+			get
+			{
+				return this._TabID;
+			}
+			set
+			{
+				if ((this._TabID != value))
+				{
+					if (this._Tab.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTabIDChanging(value);
+					this.SendPropertyChanging();
+					this._TabID = value;
+					this.SendPropertyChanged("TabID");
+					this.OnTabIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PluginID", DbType="Int NOT NULL")]
+		public int PluginID
+		{
+			get
+			{
+				return this._PluginID;
+			}
+			set
+			{
+				if ((this._PluginID != value))
+				{
+					if (this._RSSPlugin.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnPluginIDChanging(value);
+					this.SendPropertyChanging();
+					this._PluginID = value;
+					this.SendPropertyChanged("PluginID");
+					this.OnPluginIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Tab_RSSItem", Storage="_Tab", ThisKey="TabID", OtherKey="ID", IsForeignKey=true)]
+		public Tab Tab
+		{
+			get
+			{
+				return this._Tab.Entity;
+			}
+			set
+			{
+				Tab previousValue = this._Tab.Entity;
+				if (((previousValue != value) 
+							|| (this._Tab.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Tab.Entity = null;
+						previousValue.RSSItems.Remove(this);
+					}
+					this._Tab.Entity = value;
+					if ((value != null))
+					{
+						value.RSSItems.Add(this);
+						this._TabID = value.ID;
+					}
+					else
+					{
+						this._TabID = default(int);
+					}
+					this.SendPropertyChanged("Tab");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RSSPlugin_RSSItem", Storage="_RSSPlugin", ThisKey="PluginID", OtherKey="ID", IsForeignKey=true)]
+		public RSSPlugin RSSPlugin
+		{
+			get
+			{
+				return this._RSSPlugin.Entity;
+			}
+			set
+			{
+				RSSPlugin previousValue = this._RSSPlugin.Entity;
+				if (((previousValue != value) 
+							|| (this._RSSPlugin.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._RSSPlugin.Entity = null;
+						previousValue.RSSItems.Remove(this);
+					}
+					this._RSSPlugin.Entity = value;
+					if ((value != null))
+					{
+						value.RSSItems.Add(this);
+						this._PluginID = value.ID;
+					}
+					else
+					{
+						this._PluginID = default(int);
+					}
+					this.SendPropertyChanged("RSSPlugin");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.RSSPlugin")]
+	public partial class RSSPlugin : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private string _WebsiteLink;
+		
+		private string _DLLName;
+		
+		private EntitySet<RSSItem> _RSSItems;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnWebsiteLinkChanging(string value);
+    partial void OnWebsiteLinkChanged();
+    partial void OnDLLNameChanging(string value);
+    partial void OnDLLNameChanged();
+    #endregion
+		
+		public RSSPlugin()
+		{
+			this._RSSItems = new EntitySet<RSSItem>(new Action<RSSItem>(this.attach_RSSItems), new Action<RSSItem>(this.detach_RSSItems));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_WebsiteLink", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string WebsiteLink
+		{
+			get
+			{
+				return this._WebsiteLink;
+			}
+			set
+			{
+				if ((this._WebsiteLink != value))
+				{
+					this.OnWebsiteLinkChanging(value);
+					this.SendPropertyChanging();
+					this._WebsiteLink = value;
+					this.SendPropertyChanged("WebsiteLink");
+					this.OnWebsiteLinkChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DLLName", DbType="NVarChar(260) NOT NULL", CanBeNull=false)]
+		public string DLLName
+		{
+			get
+			{
+				return this._DLLName;
+			}
+			set
+			{
+				if ((this._DLLName != value))
+				{
+					this.OnDLLNameChanging(value);
+					this.SendPropertyChanging();
+					this._DLLName = value;
+					this.SendPropertyChanged("DLLName");
+					this.OnDLLNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="RSSPlugin_RSSItem", Storage="_RSSItems", ThisKey="ID", OtherKey="PluginID")]
+		public EntitySet<RSSItem> RSSItems
+		{
+			get
+			{
+				return this._RSSItems;
+			}
+			set
+			{
+				this._RSSItems.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_RSSItems(RSSItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.RSSPlugin = this;
+		}
+		
+		private void detach_RSSItems(RSSItem entity)
+		{
+			this.SendPropertyChanging();
+			entity.RSSPlugin = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Share")]
+	public partial class Share : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private int _AccountID;
+		
+		private int _TabID;
+		
+		private EntityRef<Account> _Account;
+		
+		private EntityRef<Tab> _Tab;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnAccountIDChanging(int value);
+    partial void OnAccountIDChanged();
+    partial void OnTabIDChanging(int value);
+    partial void OnTabIDChanged();
+    #endregion
+		
+		public Share()
+		{
+			this._Account = default(EntityRef<Account>);
+			this._Tab = default(EntityRef<Tab>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="Int NOT NULL")]
+		public int AccountID
+		{
+			get
+			{
+				return this._AccountID;
+			}
+			set
+			{
+				if ((this._AccountID != value))
+				{
+					if (this._Account.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAccountIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccountID = value;
+					this.SendPropertyChanged("AccountID");
+					this.OnAccountIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TabID", DbType="Int NOT NULL")]
+		public int TabID
+		{
+			get
+			{
+				return this._TabID;
+			}
+			set
+			{
+				if ((this._TabID != value))
+				{
+					if (this._Tab.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnTabIDChanging(value);
+					this.SendPropertyChanging();
+					this._TabID = value;
+					this.SendPropertyChanged("TabID");
+					this.OnTabIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Share", Storage="_Account", ThisKey="AccountID", OtherKey="ID", IsForeignKey=true)]
+		public Account Account
+		{
+			get
+			{
+				return this._Account.Entity;
+			}
+			set
+			{
+				Account previousValue = this._Account.Entity;
+				if (((previousValue != value) 
+							|| (this._Account.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Account.Entity = null;
+						previousValue.Shares.Remove(this);
+					}
+					this._Account.Entity = value;
+					if ((value != null))
+					{
+						value.Shares.Add(this);
+						this._AccountID = value.ID;
+					}
+					else
+					{
+						this._AccountID = default(int);
+					}
+					this.SendPropertyChanged("Account");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Tab_Share", Storage="_Tab", ThisKey="TabID", OtherKey="ID", IsForeignKey=true)]
+		public Tab Tab
+		{
+			get
+			{
+				return this._Tab.Entity;
+			}
+			set
+			{
+				Tab previousValue = this._Tab.Entity;
+				if (((previousValue != value) 
+							|| (this._Tab.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Tab.Entity = null;
+						previousValue.Shares.Remove(this);
+					}
+					this._Tab.Entity = value;
+					if ((value != null))
+					{
+						value.Shares.Add(this);
+						this._TabID = value.ID;
+					}
+					else
+					{
+						this._TabID = default(int);
+					}
+					this.SendPropertyChanged("Tab");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 }

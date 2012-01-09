@@ -1,32 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RSSManagementSuite" Class="RSSDBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="WebSettings" ConnectionString="Data Source=NDPHU-PC\SQLEXPRESS;Initial Catalog=RSSManagementSuite;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="RSSManagementSuiteConnectionString1" Provider="System.Data.SqlClient" />
+  <Connection Mode="WebSettings" ConnectionString="Data Source=NDPHU-PC\SQLEXPRESS;Initial Catalog=RSSManagementSuite;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="RSSManagementSuiteConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Account" Member="Accounts">
     <Type Name="Account">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Username" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
       <Column Name="Password" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
       <Column Name="Salt" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Account_Share" Member="Shares" ThisKey="ID" OtherKey="AccountID" Type="Share" />
       <Association Name="Account_Tab" Member="Tabs" ThisKey="ID" OtherKey="UserID" Type="Tab" />
-    </Type>
-  </Table>
-  <Table Name="dbo.RSSItem" Member="RSSItems">
-    <Type Name="RSSItem">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
-      <Column Name="RSSLink" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
-      <Column Name="TabID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Tab_RSSItem" Member="Tab" ThisKey="TabID" OtherKey="ID" Type="Tab" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Share" Member="Shares">
-    <Type Name="Share">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="TabID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Association Name="Account_Share" Member="Account" ThisKey="AccountID" OtherKey="ID" Type="Account" IsForeignKey="true" />
-      <Association Name="Tab_Share" Member="Tab" ThisKey="TabID" OtherKey="ID" Type="Tab" IsForeignKey="true" />
+      <Association Name="Account_Share" Member="Shares" ThisKey="ID" OtherKey="AccountID" Type="Share" />
     </Type>
   </Table>
   <Table Name="dbo.Tab" Member="Tabs">
@@ -37,6 +18,37 @@
       <Association Name="Tab_RSSItem" Member="RSSItems" ThisKey="ID" OtherKey="TabID" Type="RSSItem" />
       <Association Name="Tab_Share" Member="Shares" ThisKey="ID" OtherKey="TabID" Type="Share" />
       <Association Name="Account_Tab" Member="Account" ThisKey="UserID" OtherKey="ID" Type="Account" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RSSItem" Member="RSSItems">
+    <Type Name="RSSItem">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Column Name="RSSLink" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Column Name="TabID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PluginID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Tab_RSSItem" Member="Tab" ThisKey="TabID" OtherKey="ID" Type="Tab" IsForeignKey="true" />
+      <Association Name="RSSPlugin_RSSItem" Member="RSSPlugin" ThisKey="PluginID" OtherKey="ID" Type="RSSPlugin" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RSSPlugin" Member="RSSPlugins">
+    <Type Name="RSSPlugin">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Column Name="WebsiteLink" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Column Name="DLLName" Type="System.String" DbType="NVarChar(260) NOT NULL" CanBeNull="false" />
+      <Association Name="RSSPlugin_RSSItem" Member="RSSItems" ThisKey="ID" OtherKey="PluginID" Type="RSSItem" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Share" Member="Shares">
+    <Type Name="Share">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AccountID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TabID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Account_Share" Member="Account" ThisKey="AccountID" OtherKey="ID" Type="Account" IsForeignKey="true" />
+      <Association Name="Tab_Share" Member="Tab" ThisKey="TabID" OtherKey="ID" Type="Tab" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
