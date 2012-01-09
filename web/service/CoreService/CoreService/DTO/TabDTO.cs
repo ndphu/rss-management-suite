@@ -36,5 +36,13 @@ namespace CoreService
             get { return _ownerUsername; }
             set { _ownerUsername = value; }
         }
+
+        private int _childCount;
+
+        public int ChildCount
+        {
+            get { return _childCount; }
+            set { _childCount = value; }
+        }
     }
 }

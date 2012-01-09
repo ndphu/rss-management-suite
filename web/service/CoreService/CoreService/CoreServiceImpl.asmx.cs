@@ -346,6 +346,7 @@ namespace CoreService
                     tabdto.Name = tab.Name;
                     tabdto.OwnerID = tab.UserID;
                     tabdto.OwnerUsername = tab.Account.Username;
+                    tabdto.ChildCount = tab.RSSItems.Count;
                     result.Add(tabdto);
                 }
             }
@@ -379,6 +380,7 @@ namespace CoreService
                     tabdto.Name = tab.Name;
                     tabdto.OwnerID = tab.UserID;
                     tabdto.OwnerUsername = tab.Account.Username;
+                    tabdto.ChildCount = tab.RSSItems.Count;
                     result.Add(tabdto);
                 }
             }
