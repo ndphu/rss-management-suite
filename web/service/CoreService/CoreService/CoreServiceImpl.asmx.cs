@@ -169,7 +169,7 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
                 
-                var tabsToDelete = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                var tabsToDelete = dt.Tabs.Where(_tab => _tab.ID == tabid);
                 if (tabsToDelete.Count<Tab>() == 0)
                 {
                     result = 2;
@@ -178,7 +178,12 @@ namespace CoreService
                 {
                     var tabToDelete = tabsToDelete.Single();
                     if (tabToDelete.UserID != GetCurrentUserID())
-                        result = 1;
+                    {
+                        var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID && share.AccountID == GetCurrentUserID());
+                        dt.Shares.DeleteAllOnSubmit(shares);
+                        dt.SubmitChanges();
+                        result = 0;
+                    }
                     else
                     {
                         var shares = dt.Shares.Where(share => share.TabID == tabToDelete.ID);
@@ -221,7 +226,7 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabsToShare = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                var tabsToShare = dt.Tabs.Where(_tab => _tab.ID == tabid);
 
                 if (tabsToShare.Count<Tab>() == 0)
                     result = 2;
@@ -289,7 +294,7 @@ namespace CoreService
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
 
-                var tabsToRename = dt.Tabs.Where(_tab => _tab.ID == tabid && _tab.UserID == GetCurrentUserID());
+                var tabsToRename = dt.Tabs.Where(_tab => _tab.ID == tabid );
                 if (tabsToRename.Count<Tab>() == 0)
                     result = 2;
                 else
