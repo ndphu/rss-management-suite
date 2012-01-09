@@ -9,7 +9,8 @@
     <script src="Scripts/jqueryUI.js" type="text/javascript"></script>
 </asp:Content>
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
-    <div>
+    <div style="min-height: 800px">
+    <br />
         <asp:UpdatePanel ID="up_RssContent" runat="server" OnLoad="up_TabContent_OnLoad">
             <ContentTemplate>
                 <asp:Label ID="Label1" runat="server" Text="Your current target: "></asp:Label>
@@ -33,7 +34,7 @@
                 </div>
                 <table style="width: 100%;">
                     <tr>
-                        <td style="width: 20%" align="left" valign="top">
+                        <td style="width: 25%" align="left" valign="top">
                             <div style="width: 100%">
                                 <div>
                                     <asp:Label ID="lb_addNewTab" runat="server" Text="New tab name:"></asp:Label>
@@ -45,7 +46,7 @@
                                             </td>
                                             <td align="left" style="width: 25%">
                                                 <asp:Button ID="btn_addNewTab" runat="server" Text="Add" Width="100%" BorderStyle="Ridge"
-                                                    ValidationGroup="CheckTabNew" onclick="btn_addNewTab_Click" />
+                                                    ValidationGroup="CheckTabNew" OnClick="btn_addNewTab_Click" />
                                             </td>
                                         </tr>
                                     </table>
@@ -54,17 +55,20 @@
                                 </div>
                                 <div>
                                     <asp:TreeView ID="tv_Content" runat="server" ShowLines="true" CssClass="tv_Content"
-                                        OnSelectedNodeChanged="tv_Content_SelectedNodeChanged" >
+                                        OnSelectedNodeChanged="tv_Content_SelectedNodeChanged">
                                     </asp:TreeView>
                                 </div>
                             </div>
                         </td>
-                        <td style="width: 80%" valign="top">
+                        <td style="width: 75%" valign="top">
                             <table width="100%">
                                 <tr>
                                     <td style="width: 50%">
                                         <div style="text-align: left; vertical-align: top">
-                                            <asp:LinkButton ID="lbtn_shareTab" runat="server" Font-Bold="true" ForeColor="Green" Visible="false">Share this TAB</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_shareTab" runat="server" Font-Bold="true" ForeColor="Green"
+                                                Visible="false" OnClick="lbtn_shareTab_Click">Share</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_Rename" runat="server" Font-Bold="true" ForeColor="Orange"
+                                                Visible="false" OnClick="lbtn_Rename_Click">Rename</asp:LinkButton>
                                             <br />
                                         </div>
                                     </td>
@@ -72,18 +76,43 @@
                                         <div style="text-align: right; vertical-align: top">
                                             <asp:LinkButton ID="lbtn_deleteRssItem" runat="server" Font-Bold="true" ForeColor="Red"
                                                 OnClick="lbtn_deleteRssItem_Click" Visible="false">Delete this GADGET</asp:LinkButton>
-                                            <asp:LinkButton ID="lbtn_deleteTab" runat="server" Font-Bold="true" 
-                                                ForeColor="Red" onclick="lbtn_deleteTab_Click" Visible="false">Delete this TAB</asp:LinkButton>
+                                            <asp:LinkButton ID="lbtn_deleteTab" runat="server" Font-Bold="true" ForeColor="Red"
+                                                OnClick="lbtn_deleteTab_Click" Visible="false">Delete this TAB</asp:LinkButton>
                                             <br />
                                         </div>
                                     </td>
                                 </tr>
+                                <tr align="left">
+                                    <td align="left">
+                                        <asp:Label ID="lb_UserNameToShare" runat="server" Text="User-name: " Visible="false"></asp:Label>
+                                        <asp:TextBox ID="tb_UserNameToShare" runat="server" Visible="false"></asp:TextBox>
+                                        <asp:Button ID="btn_ShareTab" runat="server" Text="OK" BorderStyle="Ridge" 
+                                            Visible="false" ValidationGroup="CheckUserName" onclick="btn_ShareTab_Click"/>
+                                        <asp:LinkButton ID="lbtn_HideShareUI" runat="server" Visible="false" 
+                                            onclick="lbtn_HideShareUI_Click">Hide</asp:LinkButton>
+                                        <asp:Label ID="lb_ShareResult" runat="server" Text="" Font-Bold="true" Visible="false"></asp:Label>
+                                        <!--<asp:RequiredFieldValidator ID="vld_ShareTab" runat="server" ErrorMessage="The user-name is empty"
+                                            ControlToValidate="tb_UserNameToShare" ForeColor="Red" ValidationGroup="CheckUserName" Visible="false"></asp:RequiredFieldValidator>-->
+                                        
+                                        <asp:Label ID="lb_NewTabName" runat="server" Text="New tab name: " Visible="false"></asp:Label>
+                                        <asp:TextBox ID="tb_NewTabName" runat="server" Visible="false"></asp:TextBox>
+                                        <asp:Button ID="btn_RenameTab" runat="server" Text="OK" BorderStyle="Ridge" 
+                                            Visible="false" ValidationGroup="CheckTabReName" 
+                                            onclick="btn_RenameTab_Click"/>
+                                        <asp:LinkButton ID="lbtn_HideRenameUI" runat="server" Visible="false" 
+                                            onclick="lbtn_HideRenameUI_Click">Hide</asp:LinkButton>
+                                        <asp:Label ID="lb_RenameResult" runat="server" Text="" Font-Bold="true" Visible="false"></asp:Label>
+                                        <!--<asp:RequiredFieldValidator ID="vld_RenameTab" runat="server" ErrorMessage="The tab-name is empty"
+                                            ControlToValidate="tb_NewTabName" ForeColor="Red" ValidationGroup="CheckTabReName" Visible="false"></asp:RequiredFieldValidator>-->
+                                        
+                                    </td>
+                                </tr>
                             </table>
-                            <asp:DataList ID="dtl_tabContent" runat="server" Width="100%" BackColor="White" BorderColor="#CCCCCC"
-                                BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Both"
-                                OnItemCommand="dtl_tabContent_ItemCommand">
-                                <FooterStyle BackColor="#CCCC99" ForeColor="Black" />
-                                <HeaderStyle BackColor="#333333" Font-Bold="True" ForeColor="White" />
+                            <asp:DataList ID="dtl_tabContent" runat="server" Width="100%" BackColor="White" BorderColor="#CC9966"
+                                BorderStyle="None" BorderWidth="1px" CellPadding="4" GridLines="Both" OnItemCommand="dtl_tabContent_ItemCommand">
+                                <FooterStyle BackColor="#FFFFCC" ForeColor="#330099" />
+                                <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="#FFFFCC" />
+                                <ItemStyle BackColor="White" ForeColor="#330099" />
                                 <ItemTemplate>
                                     <table style="width: 100%;">
                                         <tr>
@@ -104,7 +133,7 @@
                                     </table>
                                     <br />
                                 </ItemTemplate>
-                                <SelectedItemStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White" />
+                                <SelectedItemStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="#663399" />
                             </asp:DataList>
                             <asp:DataList ID="dtl_RssContent" runat="server" Width="100%" BackColor="White" BorderColor="#CC9966"
                                 BorderStyle="None" BorderWidth="1px" CellPadding="4" GridLines="Both">
@@ -140,5 +169,10 @@
                 </table>
             </ContentTemplate>
         </asp:UpdatePanel>
+    </div>
+    <div style="height: 100%; min-height: 50px; background: Gray; border-style: solid">
+        <div style="text-align: center; vertical-align: baseline; color: White; font-size: large">
+            RSS READER APPLICATION
+        </div>
     </div>
 </asp:Content>

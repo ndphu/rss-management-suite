@@ -406,7 +406,8 @@ namespace CoreService
         // 0 - successful
         // 1 - existed
         // 2 - incorrect link
-        // 3 - failed
+        // 3 - Different onwer
+        // 4 - failed
         public int AddRSSItem(int tabid, string rsslink)
         {
             int result = 0;
@@ -432,11 +433,15 @@ namespace CoreService
                                    where tab.ID == tabid
                                    select tab).Single();
 
+                if (tabToInsert.UserID != GetCurrentUserID())
+                    return 3;
+
                 RSSItem newRssItem = new RSSItem();
                 newRssItem.Name = nameStr;
                 newRssItem.Description = descriptionStr;
                 newRssItem.RSSLink = rsslink;
                 newRssItem.TabID = tabid;
+                newRssItem.PluginID = null;
 
                 tabToInsert.RSSItems.Add(newRssItem);
 
@@ -444,7 +449,7 @@ namespace CoreService
             }
             catch
             {
-                result = 3;
+                result = 4;
             }
             finally
             {
@@ -457,7 +462,7 @@ namespace CoreService
         {
             RSSDBDataContext data = new RSSDBDataContext();
             List<RSSItem> listOfItem = (from rssitem in data.RSSItems
-                                        where rssitem.RSSLink == newRssLink
+                                        where rssitem.RSSLink == newRssLink && rssitem.Tab.UserID == GetCurrentUserID()
                                         select rssitem).ToList();
             if (listOfItem.Count > 0)
             {
@@ -511,6 +516,10 @@ namespace CoreService
                 RSSItem item = (from rssitem in data.RSSItems
                                 where rssitem.ID == rssid
                                 select rssitem).Single();
+
+                if (item.Tab.UserID != GetCurrentUserID())
+                    return false;
+
                 data.RSSItems.DeleteOnSubmit(item);
                 data.SubmitChanges();
             }
@@ -533,6 +542,19 @@ namespace CoreService
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext();
+
+                int currentUserID = GetCurrentUserID();
+                List<Tab> listOfTab_test = (from tab in data.Tabs
+                                            where tab.ID == tabid && tab.UserID == currentUserID
+                                            select tab).ToList();
+                List<Share> listOfShare_test = (from share in data.Shares
+                                                where share.TabID == tabid && share.AccountID == currentUserID
+                                                select share).ToList();
+                if (listOfShare_test.Count == 0 && listOfTab_test.Count == 0)
+                {
+                    listOfItem = new List<RSSItemDTO>();
+                    return listOfItem.ToArray();
+                }
 
                 List<RSSItem> list = (from rssItem in data.RSSItems
                                       where rssItem.TabID == tabid
@@ -569,6 +591,25 @@ namespace CoreService
                 RSSItem item = (from rssitem in data.RSSItems
                                 where rssitem.ID == rssid
                                 select rssitem).Single();
+
+                //kiểm tra
+                bool test_1 = true;
+                bool test_2 = true;
+                int currentUserID = GetCurrentUserID();
+                if (item.Tab.UserID != currentUserID)
+                    test_1 = false;
+                int tabParentID = item.TabID;
+                List<Share> listOfShare_test = (from share in data.Shares
+                                                where share.TabID == tabParentID && share.AccountID == currentUserID
+                                                select share).ToList();
+                if (listOfShare_test.Count == 0)
+                    test_2 = false;
+                if (!test_1 && !test_2)
+                {
+                    return CreateXmlErrorMessage("Error!", "Permission Denied");
+                }
+                //------------------------------------------------------
+
                 string rssLink = item.RSSLink;
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rssLink);
@@ -594,13 +635,62 @@ namespace CoreService
             }
             catch
             {
-                resultStr = "";
+                return CreateXmlErrorMessage("Error!", "Not exist RSS item that had ID = " + rssid.ToString());
             }
             finally
             {
                 
             }
             return resultStr;
+        }
+
+        private string CreateXmlErrorMessage(string error, string message)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration declaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            doc.InsertBefore(declaration, doc.DocumentElement);
+
+            XmlElement rssNode = doc.CreateElement("rss");
+            XmlAttribute rssAtt = doc.CreateAttribute("version");
+            rssAtt.Value = "2.0";
+            rssNode.Attributes.Append(rssAtt);
+
+            XmlElement channelNode = doc.CreateElement("channel");
+
+            XmlElement titleNode = doc.CreateElement("title");
+            titleNode.InnerText = error;
+            channelNode.AppendChild(titleNode);
+
+            XmlElement desNode = doc.CreateElement("description");
+            desNode.InnerText = message;
+            channelNode.AppendChild(desNode);
+
+            XmlElement linkNode = doc.CreateElement("link");
+            linkNode.InnerText = "";
+            channelNode.AppendChild(linkNode);
+
+            XmlElement itemNode = doc.CreateElement("item");
+
+            XmlElement titleNode_item = doc.CreateElement("title");
+            titleNode_item.InnerText = error;
+            itemNode.AppendChild(titleNode_item);
+
+            XmlElement desNode_item = doc.CreateElement("description");
+            desNode_item.InnerText = message;
+            itemNode.AppendChild(desNode_item);
+
+            XmlElement linkNode_item = doc.CreateElement("link");
+            linkNode_item.InnerText = "";
+            itemNode.AppendChild(linkNode_item);
+
+            XmlElement pubDateNode = doc.CreateElement("pubDate");
+            pubDateNode.InnerText = DateTime.Now.ToString();
+            itemNode.AppendChild(pubDateNode);
+
+            channelNode.AppendChild(itemNode);
+            rssNode.AppendChild(channelNode);
+            doc.AppendChild(rssNode);
+            return doc.OuterXml;
         }
         #endregion Deo
 
@@ -616,7 +706,7 @@ namespace CoreService
             List<String> result = new List<string>();
             try
             {
-                string[] fileNames = Directory.GetFiles(Server.MapPath("~") , "*.dll");
+                string[] fileNames = Directory.GetFiles(Server.MapPath("~") + @"\bin" , "*.dll");
                 foreach (string fileName in fileNames)
                 {
                     Assembly asm = Assembly.LoadFile(fileName);
@@ -627,13 +717,14 @@ namespace CoreService
                         if (type.GetInterface("IRSSPlugin") != null)
                         {
                             IRSSPlugin plugin = Activator.CreateInstance(type) as IRSSPlugin;
-                            result.Add(plugin.GetPluginName());
+                            result.Add(plugin.GetRSSWebsiteLink());
                         }
                     }
                 }
             }
             catch
             {
+
             }
 
             result.Add(Server.MapPath("~"));

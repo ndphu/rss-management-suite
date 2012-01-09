@@ -56,6 +56,7 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Content\image\Container.png" />
     <Content Include="Content\image\RssIcon.png" />
+    <Content Include="Content\image\User.png" />
     <Content Include="MainPage.aspx" />
     <Content Include="RegisterResult.aspx" />
     <Content Include="Scripts\jquery-1.6.2.min.js" />
