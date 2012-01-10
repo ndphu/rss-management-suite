@@ -42,7 +42,7 @@
                                     <table style="width: 100%">
                                         <tr>
                                             <td align="left" style="width: 75%">
-                                                <asp:TextBox ID="tb_newTabNew" runat="server" Width="95%"></asp:TextBox>
+                                                <asp:TextBox ID="tb_newTabNew" runat="server" Width="95%" MaxLength="15"></asp:TextBox>
                                             </td>
                                             <td align="left" style="width: 25%">
                                                 <asp:Button ID="btn_addNewTab" runat="server" Text="Add" Width="100%" BorderStyle="Ridge"
@@ -74,6 +74,7 @@
                                     </td>
                                     <td style="width: 50%">
                                         <div style="text-align: right; vertical-align: top">
+                                            <asp:Label ID="lb_deleteResult" runat="server" Text=""></asp:Label>
                                             <asp:LinkButton ID="lbtn_deleteRssItem" runat="server" Font-Bold="true" ForeColor="Red"
                                                 OnClick="lbtn_deleteRssItem_Click" Visible="false">Delete this GADGET</asp:LinkButton>
                                             <asp:LinkButton ID="lbtn_deleteTab" runat="server" Font-Bold="true" ForeColor="Red"
@@ -117,7 +118,7 @@
                                     <table style="width: 100%;">
                                         <tr>
                                             <div>
-                                                <asp:LinkButton ID="lbtn_rss_name" runat="server" Font-Size="Large" ForeColor="Firebrick"></asp:LinkButton>
+                                                <asp:LinkButton ID="lbtn_rss_name" runat="server" Font-Size="Large" ForeColor="Firebrick" Font-Bold="true"></asp:LinkButton>
                                             </div>
                                         </tr>
                                         <tr>
@@ -145,7 +146,7 @@
                                         <tr>
                                             <div>
                                                 <td align="left" style="width: 70%">
-                                                    <asp:HyperLink ID="hl_title" runat="server" Font-Size="Large"></asp:HyperLink>
+                                                    <asp:HyperLink ID="hl_title" runat="server" Font-Size="Large" Font-Bold="true"></asp:HyperLink>
                                                 </td>
                                                 <td align="right" style="width: 30%">
                                                     <asp:Label ID="lb_time" runat="server" Text=""></asp:Label>
