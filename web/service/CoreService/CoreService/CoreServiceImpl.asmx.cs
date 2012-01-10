@@ -735,7 +735,7 @@ namespace CoreService
             return int.Parse(Context.User.Identity.Name);
         }
 
-        public PluginDTO GetAllPlugin()
+        public PluginDTO[] GetAllPlugin()
         {
             throw new NotImplementedException();
         }

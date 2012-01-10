@@ -52,8 +52,10 @@ namespace RSSReaderWebsite
             this.Master.FindControl("img_User").Visible = true;
         }
 
+        //Load event of UpdatePanel
         protected void up_TabContent_OnLoad(object sender, EventArgs e)
         {
+            ClearNotifyMessage();
             RestoreTreeViewState();
             LoadUserContent();
         }
@@ -65,20 +67,24 @@ namespace RSSReaderWebsite
                 tv_Content_ExpandState.Add(tv_Content.Nodes[i].Value, (bool)tv_Content.Nodes[i].Expanded);
         }
 
+        private void ClearNotifyMessage()
+        {
+            lb_addResult.Text = "";
+            lb_addTabResult.Text = "";
+            lb_deleteResult.Text = "";
+            lb_ShareResult.Text = "";
+            lb_RenameResult.Text = "";
+            vld_RenameTab.Text = "";
+            vld_ShareTab.Text = "";
+        }
+
         private void LoadUserContent()
         {
             TabDTO[] listOfTab = MyProxy.getProxy().GetAllTabs();
             TabDTO[] listOfSharedTab = MyProxy.getProxy().GetAllSharedTabs();
 
-            List<TabDTO> listOfAllTab = new List<TabDTO>();
-            for (int i = 0; i < listOfTab.Count(); i++)
-                listOfAllTab.Add(listOfTab[i]);
-
-            for (int i = 0; i < listOfSharedTab.Count(); i++)
-                listOfAllTab.Add(listOfSharedTab[i]);
-
             tv_Content.Nodes.Clear();
-            foreach (TabDTO tab in listOfAllTab)
+            foreach (TabDTO tab in listOfTab)
             {
                 TreeNode tnode = new TreeNode(tab.Name, tab.Id.ToString(), "Content/image/Container.png");
                 if (tv_Content_ExpandState.ContainsKey(tab.Id.ToString()))
@@ -93,7 +99,26 @@ namespace RSSReaderWebsite
                 {
                     currentTabID = tab.Id;
                     LoadTabContent(tab.Name);
-                    //currentRssItemID = 0;
+                    currentRssItem = null;
+                }
+            }
+
+            foreach (TabDTO tab in listOfSharedTab)
+            {
+                string tabNameToDisPlay = tab.Name + " (from: " + tab.OwnerUsername + " )";
+                TreeNode tnode = new TreeNode(tabNameToDisPlay, tab.Id.ToString(), "Content/image/ShareContainer.png");
+                if (tv_Content_ExpandState.ContainsKey(tab.Id.ToString()))
+                    tnode.Expanded = tv_Content_ExpandState[tab.Id.ToString()];
+                else
+                    tnode.Expanded = false;
+
+                LoadTabContent(tab, tnode);
+                tv_Content.Nodes.Add(tnode);
+
+                if (currentTabID == 0)
+                {
+                    currentTabID = tab.Id;
+                    LoadTabContent(tab.Name);
                     currentRssItem = null;
                 }
             }
@@ -109,6 +134,7 @@ namespace RSSReaderWebsite
                 tnodeparent.ChildNodes.Add(tnode);
             }
         }
+
 
         protected void tv_Content_SelectedNodeChanged(object sender, EventArgs e)
         {
@@ -131,6 +157,7 @@ namespace RSSReaderWebsite
             }
         }
 
+        //Add các content lên rss khi click vao 1 rss item
         private void LoadRssContent(int currentID, string target, TreeNode currentNode)
         {
             lbtn_deleteRssItem.Visible = true;
@@ -192,6 +219,7 @@ namespace RSSReaderWebsite
             }
         }
 
+        //Load nội dung tab và 3 rss item đầu tiên khi click vào 1 container
         private void LoadTabContent(string target)
         {
             lbtn_deleteRssItem.Visible = false;
@@ -270,6 +298,7 @@ namespace RSSReaderWebsite
             }
         }
 
+        //Add một link rss mới vào 1 tab
         protected void btn_addNewRssLink_Click(object sender, EventArgs e)
         {
             string url = tb_newRssLink.Text.Trim();
@@ -287,13 +316,13 @@ namespace RSSReaderWebsite
                 case 1:
                     {
                         lb_addResult.ForeColor = System.Drawing.Color.Orange;
-                        lb_addResult.Text = "  This link has been existed in your tab!";
+                        lb_addResult.Text = "  Has been existed in your tab!";
                         break;
                     }
                 case 2:
                     {
                         lb_addResult.ForeColor = System.Drawing.Color.Red;
-                        lb_addResult.Text = "  This link is incorrect!";
+                        lb_addResult.Text = "  Incorrect link!";
                         break;
 
                     }
@@ -312,6 +341,7 @@ namespace RSSReaderWebsite
             }
         }
 
+        //Sự kiện khi click vào 1 tab bên update panel
         protected void dtl_tabContent_ItemCommand(object source, DataListCommandEventArgs e)
         {
             try
@@ -351,6 +381,7 @@ namespace RSSReaderWebsite
             return result;
         }
 
+        //delete rss item
         protected void lbtn_deleteRssItem_Click(object sender, EventArgs e)
         {
             if (currentRssItem == null)
@@ -378,7 +409,8 @@ namespace RSSReaderWebsite
             }
             else
             {
- 
+                lb_deleteResult.ForeColor = System.Drawing.Color.Red;
+                lb_deleteResult.Text = "Different Owner!";
             }
         }
 
@@ -396,6 +428,7 @@ namespace RSSReaderWebsite
             return result;
         }
 
+        //Add tab
         protected void btn_addNewTab_Click(object sender, EventArgs e)
         {
             string newTabName = tb_newTabNew.Text.Trim();
@@ -424,7 +457,8 @@ namespace RSSReaderWebsite
                     }
             }
         }
-
+        
+        //Delete tab
         protected void lbtn_deleteTab_Click(object sender, EventArgs e)
         {
             int result = MyProxy.getProxy().RemoveTab(currentTabID);
@@ -454,18 +488,26 @@ namespace RSSReaderWebsite
                     }
                 case 1:
                     {
+                        lb_deleteResult.ForeColor = System.Drawing.Color.Red;
+                        lb_deleteResult.Text = "Different Owner!";
                         break;
                     }
                 case 2:
                     {
+                        lb_deleteResult.ForeColor = System.Drawing.Color.Red;
+                        lb_deleteResult.Text = "Not exist!";
                         break;
                     }
                 case 3:
                     {
+                        lb_deleteResult.ForeColor = System.Drawing.Color.Red;
+                        lb_deleteResult.Text = "Fail!";
                         break;
                     }
             }
         }
+
+
 
         protected void lbtn_shareTab_Click(object sender, EventArgs e)
         {
@@ -530,6 +572,7 @@ namespace RSSReaderWebsite
             ShowRenameUI();
         }
 
+
         protected void lbtn_HideShareUI_Click(object sender, EventArgs e)
         {
             HideShareAndRenameUI();
@@ -540,6 +583,8 @@ namespace RSSReaderWebsite
             HideShareAndRenameUI();
         }
 
+
+        //Share tab
         protected void btn_ShareTab_Click(object sender, EventArgs e)
         {
             string userName = tb_UserNameToShare.Text.Trim();
@@ -591,6 +636,7 @@ namespace RSSReaderWebsite
             }
         }
 
+        //Rename
         protected void btn_RenameTab_Click(object sender, EventArgs e)
         {
             string newTabName = tb_NewTabName.Text.Trim();

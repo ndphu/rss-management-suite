@@ -43,7 +43,7 @@ namespace CoreService
 
         string[] GetAllRSSPluginLink(); // can remove this 
 
-        PluginDTO GetAllPlugin();
+        PluginDTO[] GetAllPlugin();
 
         int AddRSSItemWithPlugin(int tabid, int pluginID);
 
