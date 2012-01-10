@@ -2,10 +2,10 @@
 <publishData>
   <publishProfile publishUrl="C:\Users\NDPhu\Desktop\CoreService" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
     <file relUrl="CoreServiceImpl.asmx" publishTime="01/07/2012 14:00:53" />
-    <file relUrl="bin/CoreService.dll" publishTime="01/10/2012 09:20:25" />
-    <file relUrl="bin/RSSMSPluginInterface.pdb" publishTime="01/09/2012 20:56:19" />
-    <file relUrl="bin/RSSMSPluginInterface.dll" publishTime="01/09/2012 20:56:19" />
-    <file relUrl="bin/CoreService.pdb" publishTime="01/10/2012 09:20:25" />
-    <file relUrl="Web.config" publishTime="01/09/2012 21:25:37" />
+    <file relUrl="bin/CoreService.dll" publishTime="01/11/2012 00:24:38" />
+    <file relUrl="bin/RSSMSPluginInterface.pdb" publishTime="01/10/2012 23:53:49" />
+    <file relUrl="bin/RSSMSPluginInterface.dll" publishTime="01/10/2012 23:53:49" />
+    <file relUrl="bin/CoreService.pdb" publishTime="01/11/2012 00:24:38" />
+    <file relUrl="Web.config" publishTime="01/10/2012 23:58:17" />
   </publishProfile>
 </publishData>
