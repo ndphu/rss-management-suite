@@ -769,28 +769,12 @@ namespace CoreService
         {
             return int.Parse(Context.User.Identity.Name);
         }
-<<<<<<< .mine        [WebMethod]
-        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        public PluginDTO[] GetAllPlugin()
-=======
+
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public PluginDTO[] GetAllPlugin()
->>>>>>> .theirs        {
-<<<<<<< .mine            List<PluginDTO> result = new List<PluginDTO>();
-            result.Add(new PluginDTO() {Name="Moodle", PluginID=0, Description="Moodle plugin", WebsiteLink="abc.com" });
-            result.Add(new PluginDTO() { Name = "Garena", PluginID = 1, Description = "Garena plugin", WebsiteLink = "abadsadasdc.com" });
-            result.Add(new PluginDTO() { Name = "Yahoo", PluginID = 2, Description = "Yahoo plugin", WebsiteLink = "aadasdsabc.com" });
-            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 3, Description = "RaoVat plugin", WebsiteLink = "asdsdabc.com" });
-            result.Add(new PluginDTO() { Name = "RaoadsadasdasdsaVat", PluginID = 4, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
-            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 8, Description = "RaoVat plugin", WebsiteLink = "abadasdasdac.com" });
-            result.Add(new PluginDTO() { Name = "adsdasdasdasddsadsxzcxcxzcxzc", PluginID = 11, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
-            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 12, Description = "RaoVat plugin", WebsiteLink = "aadssadasdsabc.com" });
-            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 15, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
-            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 21, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
-            return result.ToArray<PluginDTO>();
-=======            List<PluginDTO> result = new List<PluginDTO>();
+        { List<PluginDTO> result = new List<PluginDTO>();
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext();
@@ -815,10 +799,10 @@ namespace CoreService
  
             }
             return result.ToArray();
->>>>>>> .theirs        }
+       }
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-        [WebMethod]
+
         // 0 - successful
         // 1 - existed
         // 2 - tab not exist
@@ -827,11 +811,7 @@ namespace CoreService
         // 5 - failed
         public int AddRSSItemWithPlugin(int tabid, int pluginID)
         {
-<<<<<<< .mine            RSSDBDataContext dt = new RSSDBDataContext();
-            dt.RSSItems.InsertOnSubmit(new RSSItem() { Name="name", Description = "description" , PluginID = pluginID, RSSLink = "aaa", TabID = tabid});
-            dt.SubmitChanges();
-            return 0;
-=======            int result = 0;
+            int result = 5;
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext ();
@@ -880,6 +860,7 @@ namespace CoreService
                             newItem.PluginID = plugin.ID;
                             data.RSSItems.InsertOnSubmit(newItem);
                             data.SubmitChanges();
+                            result = 0;
                         }
                     }
                 }
@@ -893,11 +874,11 @@ namespace CoreService
 
             }
             return result;
->>>>>>> .theirs        }
+        }
 
-<<<<<<< .mine        [WebMethod]
-        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
-=======>>>>>>> .theirs        public string GetNewRSSFromTab(int tabid)
+       [WebMethod]
+       [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+       public string GetNewRSSFromTab(int tabid)
         {
             XmlDocument resultXml = new XmlDocument();
             RSSDBDataContext dt = new RSSDBDataContext();
