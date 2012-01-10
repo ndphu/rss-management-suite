@@ -41,8 +41,12 @@ namespace CoreService
         string GetRSSResult(int rssid, int count);
         #endregion Deo
 
-        string GetRSSResultHTML(RSSItem rssItem, int count);
+        string[] GetAllRSSPluginLink(); // can remove this 
 
-        string[] GetAllRSSPluginLink();
+        PluginDTO GetAllPlugin();
+
+        int AddRSSItemWithPlugin(int tabid, int pluginID);
+
+        string GetNewRSSFromTab(int tabid);
     }
 }

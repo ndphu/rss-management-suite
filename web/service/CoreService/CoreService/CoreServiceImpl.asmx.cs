@@ -123,7 +123,7 @@ namespace CoreService
             try
             {
                 RSSDBDataContext dt = new RSSDBDataContext();
-                var tabs = dt.Tabs.Where(tab => tab.Name.CompareTo(tabName) == 0);
+                var tabs = dt.Tabs.Where(tab => tab.Name.CompareTo(tabName) == 0 && tab.UserID == GetCurrentUserID());
                 if (tabs.Count<Tab>() == 0)
                 {
                     int UserID = GetCurrentUserID();
@@ -695,11 +695,7 @@ namespace CoreService
         #endregion Deo
 
         #region Advance
-        [WebMethod]
-        public string GetRSSResultHTML(RSSItem rssItem, int count)
-        {
-            throw new NotImplementedException();
-        }
+        
         [WebMethod]
         public string[] GetAllRSSPluginLink()
         {
@@ -737,6 +733,22 @@ namespace CoreService
         private int  GetCurrentUserID()
         {
             return int.Parse(Context.User.Identity.Name);
+        }
+
+        public PluginDTO GetAllPlugin()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int AddRSSItemWithPlugin(int tabid, int pluginID)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public string GetNewRSSFromTab(int tabid)
+        {
+            throw new NotImplementedException();
         }
     }
 }
