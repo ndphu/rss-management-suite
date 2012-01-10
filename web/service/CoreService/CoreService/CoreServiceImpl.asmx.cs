@@ -413,7 +413,7 @@ namespace CoreService
             int result = 0;
             try
             {
-                if (IsExist(rsslink))
+                if (IsExist(rsslink, tabid))
                 {
                     result = 1;
                     return result;
@@ -458,11 +458,11 @@ namespace CoreService
             return result;
         }
 
-        private bool IsExist(string newRssLink)
+        private bool IsExist(string newRssLink, int tabid)
         {
             RSSDBDataContext data = new RSSDBDataContext();
             List<RSSItem> listOfItem = (from rssitem in data.RSSItems
-                                        where rssitem.RSSLink == newRssLink && rssitem.Tab.UserID == GetCurrentUserID()
+                                        where rssitem.RSSLink == newRssLink && rssitem.Tab.UserID == GetCurrentUserID() && rssitem.TabID == tabid
                                         select rssitem).ToList();
             if (listOfItem.Count > 0)
             {
@@ -582,15 +582,19 @@ namespace CoreService
         }
 
         [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public string GetRSSResult(int rssid, int count)
         {
             string resultStr = "";
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext();
-                RSSItem item = (from rssitem in data.RSSItems
-                                where rssitem.ID == rssid
-                                select rssitem).Single();
+                List<RSSItem> items = (from rssitem in data.RSSItems
+                                        where rssitem.ID == rssid
+                                        select rssitem).ToList();
+                if (items.Count == 0)
+                    return CreateXmlErrorMessage("Error!", "Not exist RSSItem with ID = " + rssid.ToString());
+                RSSItem item = items[0];
 
                 //kiểm tra
                 bool test_1 = true;
@@ -610,32 +614,60 @@ namespace CoreService
                 }
                 //------------------------------------------------------
 
-                string rssLink = item.RSSLink;
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rssLink);
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(reader.ReadToEnd());
-
-                XmlNode rssNode = doc.DocumentElement.SelectSingleNode("//rss");
-                XmlNode channelNode = rssNode.SelectSingleNode("./channel");
-
-                XmlNodeList listOfItemnNode = channelNode.SelectNodes(".//item");
-                int nItemNode = listOfItemnNode.Count;
-
-                for (int i = count; i < nItemNode; i++)
+                if (item.PluginID == null)
                 {
-                    if (i < 0)
-                        continue;
-                    channelNode.RemoveChild(listOfItemnNode[i]);
+                    string rssLink = item.RSSLink;
+
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(rssLink);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    XmlDocument doc = new XmlDocument();
+                    doc.LoadXml(reader.ReadToEnd());
+
+                    XmlNode rssNode = doc.DocumentElement.SelectSingleNode("//rss");
+                    XmlNode channelNode = rssNode.SelectSingleNode("./channel");
+
+                    XmlNodeList listOfItemnNode = channelNode.SelectNodes(".//item");
+                    int nItemNode = listOfItemnNode.Count;
+
+                    for (int i = count; i < nItemNode; i++)
+                    {
+                        if (i < 0)
+                            continue;
+                        channelNode.RemoveChild(listOfItemnNode[i]);
+                    }
+                    resultStr = doc.OuterXml;
                 }
-                resultStr = doc.OuterXml;
+                else
+                {
+                    List<RSSPlugin> itemPlugins = (from plu in data.RSSPlugins
+                                                  where plu.ID == item.PluginID
+                                                  select plu).ToList();
+                    if (itemPlugins.Count == 0)
+                        return CreateXmlErrorMessage("Error!", "Not exist RSSItem with ID = " + rssid.ToString());
+
+                    RSSPlugin itemPlugin = itemPlugins[0];
+
+                    string[] fileNames = Directory.GetFiles(Server.MapPath("~") + @"\bin", itemPlugin.DLLName);
+                    foreach (string fileName in fileNames)
+                    {
+                        Assembly asm = Assembly.LoadFile(fileName);
+                        Type[] types = asm.GetTypes();
+                        foreach (Type type in types)
+                        {
+                            if (type.GetInterface("IRSSPlugin") != null)
+                            {
+                                IRSSPlugin pluginObject = Activator.CreateInstance(type) as IRSSPlugin;
+                                return pluginObject.GetRSSResult(count);
+                            }
+                        }
+                    }
+                }
             }
             catch
             {
-                return CreateXmlErrorMessage("Error!", "Not exist RSS item that had ID = " + rssid.ToString());
+                return CreateXmlErrorMessage("Error!", "Some thing wrong" + rssid.ToString());
             }
             finally
             {
@@ -697,6 +729,7 @@ namespace CoreService
         #region Advance
         
         [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public string[] GetAllRSSPluginLink()
         {
             List<String> result = new List<string>();
@@ -735,16 +768,110 @@ namespace CoreService
             return int.Parse(Context.User.Identity.Name);
         }
 
+
+        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public PluginDTO[] GetAllPlugin()
         {
-            throw new NotImplementedException();
+            List<PluginDTO> result = new List<PluginDTO>();
+            try
+            {
+                RSSDBDataContext data = new RSSDBDataContext();
+                List<RSSPlugin> listOfPlugin = (from plugin in data.RSSPlugins
+                                                select plugin).ToList();
+                for (int i = 0; i < listOfPlugin.Count; i++)
+                {
+                    PluginDTO temp = new PluginDTO();
+                    temp.PluginID = listOfPlugin[i].ID;
+                    temp.Name = listOfPlugin[i].Name;
+                    temp.Description = listOfPlugin[i].Description;
+                    temp.WebsiteLink = listOfPlugin[i].WebsiteLink;
+                    result.Add(temp);
+                }
+            }
+            catch
+            {
+                result = new List<PluginDTO>();
+            }
+            finally
+            {
+ 
+            }
+            return result.ToArray();
         }
 
+        [WebMethod]
+        // 0 - successful
+        // 1 - existed
+        // 2 - tab not exist
+        // 3 - Different onwer
+        // 4 - plugin not exist
+        // 5 - failed
         public int AddRSSItemWithPlugin(int tabid, int pluginID)
         {
-            throw new NotImplementedException();
-        }
+            int result = 0;
+            try
+            {
+                RSSDBDataContext data = new RSSDBDataContext ();
+                List<Tab> tabs = (from tab in data.Tabs
+                                  where tab.ID == tabid
+                                  select tab).ToList();
+                if (tabs.Count == 0)
+                    return 2;
 
+                Tab tabToAdd = tabs[0];
+                if (tabToAdd.UserID != GetCurrentUserID())
+                    return 3;
+
+                List<RSSPlugin> plugins = (from plu in data.RSSPlugins
+                                           where plu.ID == pluginID
+                                           select plu).ToList();
+                if (plugins.Count == 0)
+                    return 4;
+
+                RSSPlugin plugin = plugins[0];
+
+                //Kiểm tra đã tồn tại plugin trong tab hay chưa
+                for (int i = 0; i < tabToAdd.RSSItems.Count; i++)
+                {
+                    if (tabToAdd.RSSItems[i].PluginID == pluginID)
+                        return 1;
+                }
+                //---------------------------------------------------------------------------
+
+                string[] fileNames = Directory.GetFiles(Server.MapPath("~") + @"\bin", plugin.DLLName);
+                foreach (string fileName in fileNames)
+                {
+                    Assembly asm = Assembly.LoadFile(fileName);
+                    Type[] types = asm.GetTypes();
+                    foreach (Type type in types)
+                    {
+                        if (type.GetInterface("IRSSPlugin") != null)
+                        {
+                            IRSSPlugin pluginObject = Activator.CreateInstance(type) as IRSSPlugin;
+
+                            RSSItem newItem = new RSSItem();
+                            newItem.Name = pluginObject.GetRSSName();
+                            newItem.Description = pluginObject.GetRSSDescription();
+                            newItem.RSSLink = pluginObject.GetRSSWebsiteLink();
+                            newItem.TabID = tabid;
+                            newItem.PluginID = plugin.ID;
+                            data.RSSItems.InsertOnSubmit(newItem);
+                            data.SubmitChanges();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                result = 5;
+            }
+            finally
+            {
+
+            }
+            return result;
+        }
 
         public string GetNewRSSFromTab(int tabid)
         {

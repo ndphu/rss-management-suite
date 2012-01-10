@@ -7,7 +7,7 @@ namespace RSSMSPluginInterface
 {
     public interface IRSSPlugin
     {
-        string GetRSSResult();
+        string GetRSSResult(int count);
 
         string GetPluginName();
 
