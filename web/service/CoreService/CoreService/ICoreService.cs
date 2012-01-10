@@ -43,10 +43,9 @@ namespace CoreService
 
         string[] GetAllRSSPluginLink(); // can remove this 
 
-<<<<<<< .mine        PluginDTO[] GetAllPlugin();
-=======        
+  
         PluginDTO[] GetAllPlugin();
->>>>>>> .theirs
+
         int AddRSSItemWithPlugin(int tabid, int pluginID);
 
         string GetNewRSSFromTab(int tabid);
