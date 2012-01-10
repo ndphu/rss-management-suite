@@ -1,0 +1,10 @@
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\RSSForDOTA.dll
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\RSSForDOTA.pdb
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\HtmlAgilityPack.dll
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\RSSMSPluginInterface.dll
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\HtmlAgilityPack.pdb
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\HtmlAgilityPack.xml
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\bin\Debug\RSSMSPluginInterface.pdb
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\obj\Debug\ResolveAssemblyReference.cache
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\obj\Debug\RSSForDOTA.dll
+D:\LTHD - working\web\plugin\RSSForDOTA\RSSForDOTA\obj\Debug\RSSForDOTA.pdb
