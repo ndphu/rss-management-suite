@@ -64,6 +64,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CoreServiceMembershipProvider.cs" />
+    <Compile Include="DTO\PluginDTO.cs" />
     <Compile Include="DTO\RSSItemDTO.cs" />
     <Compile Include="ICoreService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
