@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml;
 using System.Reflection;
 using RSSMSPluginInterface;
+using System.Globalization;
 
 namespace CoreService
 {
@@ -762,18 +763,34 @@ namespace CoreService
             
         }
         #endregion Advance
-
+        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         private int  GetCurrentUserID()
         {
             return int.Parse(Context.User.Identity.Name);
         }
-
+<<<<<<< .mine        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+        public PluginDTO[] GetAllPlugin()
+=======
 
         [WebMethod]
         [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         public PluginDTO[] GetAllPlugin()
-        {
-            List<PluginDTO> result = new List<PluginDTO>();
+>>>>>>> .theirs        {
+<<<<<<< .mine            List<PluginDTO> result = new List<PluginDTO>();
+            result.Add(new PluginDTO() {Name="Moodle", PluginID=0, Description="Moodle plugin", WebsiteLink="abc.com" });
+            result.Add(new PluginDTO() { Name = "Garena", PluginID = 1, Description = "Garena plugin", WebsiteLink = "abadsadasdc.com" });
+            result.Add(new PluginDTO() { Name = "Yahoo", PluginID = 2, Description = "Yahoo plugin", WebsiteLink = "aadasdsabc.com" });
+            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 3, Description = "RaoVat plugin", WebsiteLink = "asdsdabc.com" });
+            result.Add(new PluginDTO() { Name = "RaoadsadasdasdsaVat", PluginID = 4, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
+            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 8, Description = "RaoVat plugin", WebsiteLink = "abadasdasdac.com" });
+            result.Add(new PluginDTO() { Name = "adsdasdasdasddsadsxzcxcxzcxzc", PluginID = 11, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
+            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 12, Description = "RaoVat plugin", WebsiteLink = "aadssadasdsabc.com" });
+            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 15, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
+            result.Add(new PluginDTO() { Name = "RaoVat", PluginID = 21, Description = "RaoVat plugin", WebsiteLink = "abc.com" });
+            return result.ToArray<PluginDTO>();
+=======            List<PluginDTO> result = new List<PluginDTO>();
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext();
@@ -798,8 +815,9 @@ namespace CoreService
  
             }
             return result.ToArray();
-        }
-
+>>>>>>> .theirs        }
+        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
         [WebMethod]
         // 0 - successful
         // 1 - existed
@@ -809,7 +827,11 @@ namespace CoreService
         // 5 - failed
         public int AddRSSItemWithPlugin(int tabid, int pluginID)
         {
-            int result = 0;
+<<<<<<< .mine            RSSDBDataContext dt = new RSSDBDataContext();
+            dt.RSSItems.InsertOnSubmit(new RSSItem() { Name="name", Description = "description" , PluginID = pluginID, RSSLink = "aaa", TabID = tabid});
+            dt.SubmitChanges();
+            return 0;
+=======            int result = 0;
             try
             {
                 RSSDBDataContext data = new RSSDBDataContext ();
@@ -871,11 +893,90 @@ namespace CoreService
 
             }
             return result;
-        }
+>>>>>>> .theirs        }
 
-        public string GetNewRSSFromTab(int tabid)
+<<<<<<< .mine        [WebMethod]
+        [PrincipalPermission(SecurityAction.Demand, Authenticated = true)]
+=======>>>>>>> .theirs        public string GetNewRSSFromTab(int tabid)
         {
-            throw new NotImplementedException();
+            XmlDocument resultXml = new XmlDocument();
+            RSSDBDataContext dt = new RSSDBDataContext();
+            try
+            {
+                int currentUserID = GetCurrentUserID();
+                List<Tab> listOfTab_test = (from tab in dt.Tabs
+                                            where tab.ID == tabid && tab.UserID == currentUserID
+                                            select tab).ToList();
+                List<Share> listOfShare_test = (from share in dt.Shares
+                                                where share.TabID == tabid && share.AccountID == currentUserID
+                                                select share).ToList();
+                if (listOfShare_test.Count == 0 && listOfTab_test.Count == 0)
+                {
+                    return CreateXmlErrorMessage("Permission Error", "You are not allowed to view this tab");
+                }
+                Tab _tabToCheck = dt.Tabs.Single(_s => _s.ID == tabid);
+                List<XmlElement> itemElements = new List<XmlElement>();
+                foreach (RSSItem rssitem in _tabToCheck.RSSItems)
+                {
+                    try
+                    {
+                        string response = GetRSSResult(rssitem.ID, 999);
+                        response = response.Replace("pubdate", "pubDate");
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(response);
+                        foreach (XmlElement element in doc.GetElementsByTagName("item"))
+                        {
+                            XmlElement pubDate = (XmlElement)element.GetElementsByTagName("pubDate").Item(0);
+                            string dateTimeString = pubDate.InnerText;
+                            CultureInfo cultureInfo = new CultureInfo("fr-FR", false);
+                            DateTime result = new DateTime();
+
+                            if (dateTimeString.Contains("SA") || dateTimeString.Contains("CH"))
+                            {
+                                dateTimeString = dateTimeString.Replace("SA", "AM").Replace("CH", "PM");
+                                result = DateTime.Parse(dateTimeString, cultureInfo);
+                            }
+                            else
+                            {
+                                result = DateTime.Parse(dateTimeString);
+
+                            }
+                            pubDate.InnerText = result.ToString();
+                            itemElements.Add(element);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+
+                var sorted = itemElements.OrderByDescending(c => DateTime.Parse(c.GetElementsByTagName("pubDate")[0].InnerText));
+                itemElements = sorted.ToList();
+
+                string title = _tabToCheck.Name;
+                string description = "All new from " + title + " tab";
+                string link = "/CoreService.asmx";
+                resultXml.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\"?><rss version=\"2.0\"><channel><title>" + title + "</title><description>" + description + "</description><link>" + link + "</link></channel></rss>");
+
+                XmlElement channel = (XmlElement)resultXml.DocumentElement.SelectNodes("channel")[0];
+                if (itemElements.Count == 0)
+                    return CreateXmlErrorMessage("Notification", "This tab is empty");
+                int count = 0;
+                foreach (XmlElement element in itemElements)
+                {
+                    XmlElement item = resultXml.CreateElement("item");
+                    item.InnerXml = element.InnerXml;
+                    channel.AppendChild(item);
+                    count++;
+                    if (count == 15)
+                        break;
+                }
+            }
+            catch
+            {
+                return CreateXmlErrorMessage("Error!", "Not exist Tab that had ID = " + tabid.ToString());
+            }
+            return resultXml.InnerXml;
         }
     }
 }
