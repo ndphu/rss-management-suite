@@ -145,10 +145,10 @@
                                     <table style="width: 100%;">
                                         <tr>
                                             <div>
-                                                <td align="left" style="width: 70%">
+                                                <td align="left" valign="top" style="width: 70%">
                                                     <asp:HyperLink ID="hl_title" runat="server" Font-Size="Large" Font-Bold="true"></asp:HyperLink>
                                                 </td>
-                                                <td align="right" style="width: 30%">
+                                                <td align="right" valign="top" style="width: 30%">
                                                     <asp:Label ID="lb_time" runat="server" Text=""></asp:Label>
                                                 </td>
                                             </div>
