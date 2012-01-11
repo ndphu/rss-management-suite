@@ -207,7 +207,7 @@ namespace RSSReaderWebsite
                     }
                     catch
                     {
-                        lb.Text = "None";
+                        lb.Text = pubdateNode.InnerText;
                     }
                 }
                 if (descriptionNode != null)
